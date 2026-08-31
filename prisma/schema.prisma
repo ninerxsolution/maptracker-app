@@ -1,6 +1,8 @@
 // MapTracker — Prisma schema
-// Domain models are added in the "database schema & seed" work (issue #2).
 // Docs: https://pris.ly/d/prisma-schema
+//
+// NOTE: SQLite does not support native enums, so role/status/alert are stored
+// as strings and validated in the app layer (see src/lib/constants.ts).
 
 generator client {
   provider = "prisma-client-js"
@@ -9,4 +11,105 @@ generator client {
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  role         String    @default("USER") // USER | ADMIN
+  status       String    @default("ACTIVE") // ACTIVE | SUSPENDED
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  lastLoginAt  DateTime?
+
+  watchZones WatchZone[]
+  bookmarks  Bookmark[]
+  alerts     AlertLog[]
+
+  @@index([role])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model WatchZone {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name         String
+  centerLat    Float
+  centerLng    Float
+  radiusKm     Float    @default(300)
+  minMagnitude Float    @default(4)
+  color        String   @default("#38bdf8")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  alerts AlertLog[]
+
+  @@index([userId])
+}
+
+/// A user-saved snapshot of a specific earthquake (persists after it leaves the live feed).
+model Bookmark {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventId    String // USGS event id
+  magnitude  Float?
+  place      String?
+  latitude   Float
+  longitude  Float
+  depthKm    Float?
+  occurredAt DateTime
+  note       String?
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, eventId])
+  @@index([userId])
+}
+
+/// Cache of ingested USGS events — powers analytics and alert matching.
+model SeismicEvent {
+  id           String   @id // USGS event id (natural key)
+  magnitude    Float?
+  place        String?
+  latitude     Float
+  longitude    Float
+  depthKm      Float?
+  occurredAt   DateTime
+  updatedAt    DateTime
+  magType      String?
+  type         String   @default("earthquake")
+  tsunami      Int      @default(0)
+  felt         Int?
+  alert        String? // green | yellow | orange | red
+  significance Int?
+  url          String?
+  source       String   @default("usgs")
+  syncedAt     DateTime @default(now())
+
+  alerts AlertLog[]
+
+  @@index([occurredAt])
+  @@index([magnitude])
+}
+
+/// A record that a seismic event matched a user's watch zone.
+model AlertLog {
+  id          String       @id @default(cuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  watchZoneId String
+  watchZone   WatchZone    @relation(fields: [watchZoneId], references: [id], onDelete: Cascade)
+  eventId     String
+  event       SeismicEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  magnitude   Float?
+  createdAt   DateTime     @default(now())
+  readAt      DateTime?
+
+  @@unique([watchZoneId, eventId])
+  @@index([userId])
+  @@index([userId, readAt])
 }
