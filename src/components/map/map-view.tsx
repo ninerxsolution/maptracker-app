@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { Spinner } from "@/components/ui/spinner";
 
-export type { MapFocus, MapZone } from "./quake-map";
+export type { MapFocus, MapZone, MapDraft } from "./quake-map";
 
 function MapSkeleton() {
   return (

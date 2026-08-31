@@ -8,6 +8,7 @@ import {
   Circle,
   Tooltip,
   useMap,
+  useMapEvents,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import type { Quake } from "@/lib/usgs";
@@ -24,6 +25,13 @@ export type MapZone = {
 
 export type MapFocus = { lat: number; lng: number; zoom?: number } | null;
 
+export type MapDraft = {
+  lat: number;
+  lng: number;
+  radiusKm: number;
+  color: string;
+} | null;
+
 const MAX_MARKERS = 2500;
 
 function FocusController({ focus }: { focus: MapFocus }) {
@@ -36,18 +44,31 @@ function FocusController({ focus }: { focus: MapFocus }) {
   return null;
 }
 
+function ClickHandler({ onClick }: { onClick: (lat: number, lng: number) => void }) {
+  useMapEvents({
+    click(e) {
+      onClick(e.latlng.lat, e.latlng.lng);
+    },
+  });
+  return null;
+}
+
 export default function QuakeMap({
   quakes,
   selectedId,
   onSelect,
   focus = null,
   zones,
+  draft = null,
+  onMapClick,
 }: {
   quakes: Quake[];
   selectedId?: string | null;
   onSelect?: (q: Quake) => void;
   focus?: MapFocus;
   zones?: MapZone[];
+  draft?: MapDraft;
+  onMapClick?: (lat: number, lng: number) => void;
 }) {
   // Cap markers for performance, keeping the largest-magnitude events.
   const shown = useMemo(() => {
@@ -113,6 +134,32 @@ export default function QuakeMap({
         );
       })}
 
+      {draft && (
+        <>
+          <Circle
+            center={[draft.lat, draft.lng]}
+            radius={draft.radiusKm * 1000}
+            pathOptions={{
+              color: draft.color,
+              fillColor: draft.color,
+              fillOpacity: 0.12,
+              weight: 2,
+            }}
+          />
+          <CircleMarker
+            center={[draft.lat, draft.lng]}
+            radius={5}
+            pathOptions={{
+              color: "#ffffff",
+              fillColor: draft.color,
+              fillOpacity: 1,
+              weight: 2,
+            }}
+          />
+        </>
+      )}
+
+      {onMapClick && <ClickHandler onClick={onMapClick} />}
       <FocusController focus={focus} />
     </MapContainer>
   );

@@ -12,7 +12,7 @@ export function RelativeTime({
   value,
   className,
 }: {
-  value: number | Date | null | undefined;
+  value: number | string | Date | null | undefined;
   className?: string;
 }) {
   const [mounted, setMounted] = useState(false);

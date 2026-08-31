@@ -1,14 +1,16 @@
 import { formatDistanceToNowStrict } from "date-fns";
 
-export function relativeTime(input: number | Date | null | undefined): string {
+type TimeInput = number | string | Date | null | undefined;
+
+export function relativeTime(input: TimeInput): string {
   if (input == null) return "—";
-  const date = typeof input === "number" ? new Date(input) : input;
+  const date = input instanceof Date ? input : new Date(input);
   return formatDistanceToNowStrict(date, { addSuffix: true });
 }
 
-export function dateTime(input: number | Date | null | undefined): string {
+export function dateTime(input: TimeInput): string {
   if (input == null) return "—";
-  const date = typeof input === "number" ? new Date(input) : input;
+  const date = input instanceof Date ? input : new Date(input);
   return date.toLocaleString(undefined, {
     year: "numeric",
     month: "short",
