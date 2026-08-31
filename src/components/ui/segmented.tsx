@@ -8,16 +8,19 @@ export function Segmented<T extends string>({
   options,
   className,
   size = "md",
+  ariaLabel,
 }: {
   value: T;
   onChange: (value: T) => void;
   options: { value: T; label: string }[];
   className?: string;
   size?: "sm" | "md";
+  ariaLabel?: string;
 }) {
   return (
     <div
-      role="tablist"
+      role="group"
+      aria-label={ariaLabel}
       className={cn(
         "inline-flex w-full rounded-xl border border-border bg-surface-2 p-1",
         className,
@@ -28,8 +31,8 @@ export function Segmented<T extends string>({
         return (
           <button
             key={opt.value}
-            role="tab"
-            aria-selected={active}
+            type="button"
+            aria-pressed={active}
             onClick={() => onChange(opt.value)}
             className={cn(
               "flex-1 rounded-lg font-medium transition-all duration-200",

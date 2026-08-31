@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -36,6 +36,15 @@ export function AdminShell({
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [mobileOpen]);
+
   const isActive = (href: string) =>
     href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
 
@@ -63,6 +72,7 @@ export function AdminShell({
               key={item.href}
               href={item.href}
               onClick={() => setMobileOpen(false)}
+              aria-current={active ? "page" : undefined}
               className={cn(
                 "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
                 active
@@ -112,6 +122,11 @@ export function AdminShell({
         />
       )}
       <aside
+        id="admin-drawer"
+        role="dialog"
+        aria-modal={mobileOpen}
+        aria-label="Admin navigation menu"
+        inert={!mobileOpen}
         className={cn(
           "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-border bg-surface transition-transform duration-300 lg:hidden",
           mobileOpen ? "translate-x-0" : "-translate-x-full",
@@ -126,6 +141,8 @@ export function AdminShell({
             onClick={() => setMobileOpen(true)}
             className="grid h-9 w-9 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-fg"
             aria-label="Open menu"
+            aria-expanded={mobileOpen}
+            aria-controls="admin-drawer"
           >
             <Menu className="h-5 w-5" />
           </button>

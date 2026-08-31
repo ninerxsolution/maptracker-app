@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -39,6 +39,15 @@ export function AppShell({
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [mobileOpen]);
+
   const nav: NavItem[] = [
     { href: "/app", label: "Dashboard", icon: LayoutDashboard },
     { href: "/app/zones", label: "Watch zones", icon: Radar },
@@ -72,6 +81,7 @@ export function AppShell({
               key={item.href}
               href={item.href}
               onClick={() => setMobileOpen(false)}
+              aria-current={active ? "page" : undefined}
               className={cn(
                 "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
                 active
@@ -82,7 +92,7 @@ export function AppShell({
               <item.icon className="h-4.5 w-4.5 shrink-0" />
               <span className="flex-1">{item.label}</span>
               {item.badge ? (
-                <span className="grid h-5 min-w-5 place-items-center rounded-full bg-danger px-1.5 text-[11px] font-semibold text-white">
+                <span className="grid h-5 min-w-5 place-items-center rounded-full bg-danger px-1.5 text-[11px] font-bold text-bg">
                   {item.badge > 99 ? "99+" : item.badge}
                 </span>
               ) : null}
@@ -134,6 +144,11 @@ export function AppShell({
         />
       )}
       <aside
+        id="app-drawer"
+        role="dialog"
+        aria-modal={mobileOpen}
+        aria-label="Navigation menu"
+        inert={!mobileOpen}
         className={cn(
           "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-border bg-surface transition-transform duration-300 lg:hidden",
           mobileOpen ? "translate-x-0" : "-translate-x-full",
@@ -149,6 +164,8 @@ export function AppShell({
             onClick={() => setMobileOpen(true)}
             className="grid h-9 w-9 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-fg"
             aria-label="Open menu"
+            aria-expanded={mobileOpen}
+            aria-controls="app-drawer"
           >
             <Menu className="h-5 w-5" />
           </button>

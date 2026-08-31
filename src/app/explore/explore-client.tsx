@@ -85,9 +85,11 @@ export function ExploreClient({
   const [focus, setFocus] = useState<MapFocus>(null);
 
   const didMount = useRef(false);
+  const reqId = useRef(0);
 
   const load = useCallback(
     async (w: TimeWindow, silent = false) => {
+      const my = ++reqId.current;
       if (!silent) setLoading(true);
       setError(null);
       try {
@@ -96,12 +98,15 @@ export function ExploreClient({
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = (await res.json()) as QuakeResponse;
+        if (my !== reqId.current) return; // a newer request superseded this one
         setAll(data.quakes);
         setGenerated(data.generated);
       } catch {
-        setError("Couldn't reach the USGS feed. Retrying shortly…");
+        if (my === reqId.current) {
+          setError("Couldn't reach the USGS feed. Retrying shortly…");
+        }
       } finally {
-        setLoading(false);
+        if (my === reqId.current) setLoading(false);
       }
     },
     [],
@@ -164,12 +169,19 @@ export function ExploreClient({
           </p>
 
           <div className="mt-4 space-y-2.5">
-            <Segmented value={win} onChange={setWin} options={WINDOW_OPTIONS} size="sm" />
+            <Segmented
+              value={win}
+              onChange={setWin}
+              options={WINDOW_OPTIONS}
+              size="sm"
+              ariaLabel="Time window"
+            />
             <Segmented
               value={minMag}
               onChange={setMinMag}
               options={MAG_OPTIONS}
               size="sm"
+              ariaLabel="Minimum magnitude"
             />
           </div>
 
@@ -287,7 +299,11 @@ export function ExploreClient({
           focus={focus}
         />
         <QuakeLegend className="absolute bottom-3 left-3 z-[500]" />
-        <div className="pointer-events-none absolute right-3 top-3 z-[500]">
+        <div
+          className="pointer-events-none absolute right-3 top-3 z-[500]"
+          role="status"
+          aria-live="polite"
+        >
           {loading && (
             <span className="glass inline-flex items-center gap-2 rounded-full border border-border/70 px-3 py-1.5 text-xs text-muted">
               <Spinner className="h-3.5 w-3.5 text-primary" />

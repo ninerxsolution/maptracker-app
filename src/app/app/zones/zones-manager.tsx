@@ -350,6 +350,7 @@ function ZoneForm({
           )}
         </div>
         <select
+          aria-label="Jump to a preset region"
           className="mt-2 h-10 w-full rounded-xl border border-border bg-surface-2 px-3 text-sm text-fg focus:border-primary focus-visible:outline-none"
           value=""
           onChange={(e) => {
@@ -382,6 +383,8 @@ function ZoneForm({
           onChange={(e) =>
             setForm((f) => ({ ...f, radiusKm: Number(e.target.value) }))
           }
+          aria-label="Zone radius in kilometres"
+          aria-valuetext={`${form.radiusKm} km`}
           className="w-full accent-[var(--color-primary)]"
         />
       </div>
@@ -395,6 +398,7 @@ function ZoneForm({
           onChange={(v) => setForm((f) => ({ ...f, minMagnitude: v }))}
           options={MAG_OPTS}
           size="sm"
+          ariaLabel="Alert threshold magnitude"
         />
       </div>
 

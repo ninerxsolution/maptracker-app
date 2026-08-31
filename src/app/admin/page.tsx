@@ -10,7 +10,7 @@ import {
   BellRing,
 } from "lucide-react";
 import { db } from "@/lib/db";
-import { magnitudeBucket, MAG_LABELS, MAG_COLORS, type MagBucket } from "@/lib/magnitude";
+import { MAG_LABELS, MAG_COLORS, type MagBucket } from "@/lib/magnitude";
 import { relativeTime } from "@/lib/format";
 import { Container } from "@/components/ui/container";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -32,6 +32,7 @@ const MAG_ORDER: MagBucket[] = [
 ];
 
 export default async function AdminOverview() {
+  const thirtyDaysAgo = subDays(new Date(), 30);
   const [
     userCount,
     activeCount,
@@ -41,10 +42,15 @@ export default async function AdminOverview() {
     bookmarkCount,
     eventCount,
     alertCount,
-    users,
-    events,
+    signupUsers,
     recentUsers,
     lastEvent,
+    mMinor,
+    mLight,
+    mModerate,
+    mStrong,
+    mMajor,
+    mGreat,
   ] = await Promise.all([
     db.user.count(),
     db.user.count({ where: { status: "ACTIVE" } }),
@@ -54,14 +60,25 @@ export default async function AdminOverview() {
     db.bookmark.count(),
     db.seismicEvent.count(),
     db.alertLog.count(),
-    db.user.findMany({ select: { createdAt: true } }),
-    db.seismicEvent.findMany({ select: { magnitude: true } }),
+    db.user.findMany({
+      where: { createdAt: { gte: thirtyDaysAgo } },
+      select: { createdAt: true },
+    }),
     db.user.findMany({
       orderBy: { createdAt: "desc" },
       take: 6,
       select: { id: true, name: true, email: true, role: true, createdAt: true },
     }),
-    db.seismicEvent.findFirst({ orderBy: { syncedAt: "desc" }, select: { syncedAt: true } }),
+    db.seismicEvent.findFirst({
+      orderBy: { syncedAt: "desc" },
+      select: { syncedAt: true },
+    }),
+    db.seismicEvent.count({ where: { magnitude: { lt: 2.5 } } }),
+    db.seismicEvent.count({ where: { magnitude: { gte: 2.5, lt: 4.5 } } }),
+    db.seismicEvent.count({ where: { magnitude: { gte: 4.5, lt: 6 } } }),
+    db.seismicEvent.count({ where: { magnitude: { gte: 6, lt: 7 } } }),
+    db.seismicEvent.count({ where: { magnitude: { gte: 7, lt: 8 } } }),
+    db.seismicEvent.count({ where: { magnitude: { gte: 8 } } }),
   ]);
 
   // Signups over the last 30 days
@@ -69,7 +86,7 @@ export default async function AdminOverview() {
   for (let i = 29; i >= 0; i--) {
     dayCounts.set(format(startOfDay(subDays(new Date(), i)), "yyyy-MM-dd"), 0);
   }
-  for (const u of users) {
+  for (const u of signupUsers) {
     const key = format(startOfDay(u.createdAt), "yyyy-MM-dd");
     if (dayCounts.has(key)) dayCounts.set(key, (dayCounts.get(key) ?? 0) + 1);
   }
@@ -78,19 +95,18 @@ export default async function AdminOverview() {
     count: c,
   }));
 
-  // Events by magnitude bucket
-  const magCounts: Record<MagBucket, number> = {
-    minor: 0,
-    light: 0,
-    moderate: 0,
-    strong: 0,
-    major: 0,
-    great: 0,
+  // Events by magnitude bucket (counted DB-side, not materialized in memory)
+  const magByBucket: Record<MagBucket, number> = {
+    minor: mMinor,
+    light: mLight,
+    moderate: mModerate,
+    strong: mStrong,
+    major: mMajor,
+    great: mGreat,
   };
-  for (const e of events) magCounts[magnitudeBucket(e.magnitude)]++;
   const magData = MAG_ORDER.map((b) => ({
     label: MAG_LABELS[b],
-    count: magCounts[b],
+    count: magByBucket[b],
     color: MAG_COLORS[b],
   }));
 

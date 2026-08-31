@@ -74,6 +74,7 @@ export function ContentModeration({
           { value: "bookmarks", label: `Bookmarks (${b.length})` },
         ]}
         className="max-w-md"
+        ariaLabel="Content type"
       />
 
       {tab === "zones" ? (

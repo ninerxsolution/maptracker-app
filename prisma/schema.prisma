@@ -94,6 +94,7 @@ model SeismicEvent {
 
   @@index([occurredAt])
   @@index([magnitude])
+  @@index([syncedAt])
 }
 
 /// A record that a seismic event matched a user's watch zone.
@@ -112,4 +113,5 @@ model AlertLog {
   @@unique([watchZoneId, eventId])
   @@index([userId])
   @@index([userId, readAt])
+  @@index([createdAt])
 }
