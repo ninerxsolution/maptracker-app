@@ -1,45 +1,209 @@
-import { ShieldCheck } from "lucide-react";
-import { requireAdmin } from "@/lib/auth/current-user";
+import { format, startOfDay, subDays } from "date-fns";
+import {
+  Users,
+  UserCheck,
+  UserX,
+  ShieldCheck,
+  Radar,
+  Bookmark,
+  Globe2,
+  BellRing,
+} from "lucide-react";
+import { db } from "@/lib/db";
+import { magnitudeBucket, MAG_LABELS, MAG_COLORS, type MagBucket } from "@/lib/magnitude";
+import { relativeTime } from "@/lib/format";
 import { Container } from "@/components/ui/container";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { StatTile } from "@/components/ui/stat-tile";
 import { Avatar } from "@/components/ui/avatar";
-import { Logo } from "@/components/brand/logo";
-import { LogoutButton } from "@/components/auth/logout-button";
+import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/app/page-header";
+import { SignupsAreaChart, MagnitudeBarChart } from "@/components/admin/charts";
 
-// Placeholder admin home — replaced by the full backoffice in a later change.
-export default async function AdminHome() {
-  const user = await requireAdmin();
+export const metadata = { title: "Admin overview" };
+
+const MAG_ORDER: MagBucket[] = [
+  "minor",
+  "light",
+  "moderate",
+  "strong",
+  "major",
+  "great",
+];
+
+export default async function AdminOverview() {
+  const [
+    userCount,
+    activeCount,
+    suspendedCount,
+    adminCount,
+    zoneCount,
+    bookmarkCount,
+    eventCount,
+    alertCount,
+    users,
+    events,
+    recentUsers,
+    lastEvent,
+  ] = await Promise.all([
+    db.user.count(),
+    db.user.count({ where: { status: "ACTIVE" } }),
+    db.user.count({ where: { status: "SUSPENDED" } }),
+    db.user.count({ where: { role: "ADMIN" } }),
+    db.watchZone.count(),
+    db.bookmark.count(),
+    db.seismicEvent.count(),
+    db.alertLog.count(),
+    db.user.findMany({ select: { createdAt: true } }),
+    db.seismicEvent.findMany({ select: { magnitude: true } }),
+    db.user.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 6,
+      select: { id: true, name: true, email: true, role: true, createdAt: true },
+    }),
+    db.seismicEvent.findFirst({ orderBy: { syncedAt: "desc" }, select: { syncedAt: true } }),
+  ]);
+
+  // Signups over the last 30 days
+  const dayCounts = new Map<string, number>();
+  for (let i = 29; i >= 0; i--) {
+    dayCounts.set(format(startOfDay(subDays(new Date(), i)), "yyyy-MM-dd"), 0);
+  }
+  for (const u of users) {
+    const key = format(startOfDay(u.createdAt), "yyyy-MM-dd");
+    if (dayCounts.has(key)) dayCounts.set(key, (dayCounts.get(key) ?? 0) + 1);
+  }
+  const signups = [...dayCounts.entries()].map(([k, c]) => ({
+    date: format(new Date(k), "MMM d"),
+    count: c,
+  }));
+
+  // Events by magnitude bucket
+  const magCounts: Record<MagBucket, number> = {
+    minor: 0,
+    light: 0,
+    moderate: 0,
+    strong: 0,
+    major: 0,
+    great: 0,
+  };
+  for (const e of events) magCounts[magnitudeBucket(e.magnitude)]++;
+  const magData = MAG_ORDER.map((b) => ({
+    label: MAG_LABELS[b],
+    count: magCounts[b],
+    color: MAG_COLORS[b],
+  }));
 
   return (
-    <div className="min-h-dvh">
-      <header className="border-b border-border/70">
-        <Container className="flex h-16 items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Logo href="/admin" />
-            <Badge variant="danger">Admin</Badge>
-          </div>
-          <div className="flex items-center gap-3">
-            <Avatar name={user.name} />
-            <LogoutButton />
-          </div>
-        </Container>
-      </header>
+    <Container className="space-y-6 py-6">
+      <PageHeader
+        title="Platform overview"
+        description="Usage and health across MapTracker."
+      />
 
-      <Container className="py-16">
-        <Card className="mx-auto max-w-lg p-8 text-center">
-          <span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-primary/12 text-primary">
-            <ShieldCheck className="h-6 w-6" />
-          </span>
-          <h1 className="mt-4 font-display text-2xl font-bold text-fg">
-            Admin access confirmed
-          </h1>
-          <p className="mt-2 text-sm text-muted">
-            Welcome, {user.name}. The backoffice — analytics, user management and
-            moderation — is coming next.
-          </p>
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <StatTile label="Total users" value={userCount} icon={Users} />
+        <StatTile label="Active" value={activeCount} icon={UserCheck} accent="success" />
+        <StatTile label="Suspended" value={suspendedCount} icon={UserX} accent="danger" />
+        <StatTile label="Admins" value={adminCount} icon={ShieldCheck} accent="primary" />
+        <StatTile label="Watch zones" value={zoneCount} icon={Radar} accent="primary" />
+        <StatTile label="Bookmarks" value={bookmarkCount} icon={Bookmark} accent="success" />
+        <StatTile label="Synced events" value={eventCount} icon={Globe2} accent="warning" />
+        <StatTile label="Alerts fired" value={alertCount} icon={BellRing} accent="danger" />
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>New signups · last 30 days</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <SignupsAreaChart data={signups} />
+          </CardContent>
         </Card>
-      </Container>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Synced events by magnitude</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <MagnitudeBarChart data={magData} />
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-3">
+        <Card className="lg:col-span-2">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Newest members</CardTitle>
+            <span className="text-xs text-faint">
+              Last sync {lastEvent ? relativeTime(lastEvent.syncedAt) : "—"}
+            </span>
+          </CardHeader>
+          <div className="px-2 pb-2">
+            <ul className="divide-y divide-border/50">
+              {recentUsers.map((u) => (
+                <li key={u.id} className="flex items-center gap-3 px-3 py-2.5">
+                  <Avatar name={u.name} />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium text-fg">{u.name}</p>
+                    <p className="truncate text-xs text-faint">{u.email}</p>
+                  </div>
+                  {u.role === "ADMIN" && <Badge variant="primary">Admin</Badge>}
+                  <span className="text-xs text-faint">
+                    {relativeTime(u.createdAt)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Composition</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Ratio label="Active" value={activeCount} total={userCount} color="var(--color-success)" />
+            <Ratio label="Suspended" value={suspendedCount} total={userCount} color="var(--color-danger)" />
+            <Ratio label="Admins" value={adminCount} total={userCount} color="var(--color-primary)" />
+            <Ratio
+              label="Users with zones"
+              value={zoneCount > 0 ? Math.min(userCount, zoneCount) : 0}
+              total={userCount}
+              color="var(--color-warning)"
+            />
+          </CardContent>
+        </Card>
+      </div>
+    </Container>
+  );
+}
+
+function Ratio({
+  label,
+  value,
+  total,
+  color,
+}: {
+  label: string;
+  value: number;
+  total: number;
+  color: string;
+}) {
+  const pct = total > 0 ? Math.round((value / total) * 100) : 0;
+  return (
+    <div>
+      <div className="mb-1 flex items-center justify-between text-sm">
+        <span className="text-muted">{label}</span>
+        <span className="font-medium text-fg tabular">{value}</span>
+      </div>
+      <div className="h-2 overflow-hidden rounded-full bg-surface-3">
+        <div
+          className="h-full rounded-full transition-all"
+          style={{ width: `${pct}%`, background: color }}
+        />
+      </div>
     </div>
   );
 }
