@@ -31,13 +31,15 @@ export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
 
 export async function requireUser(): Promise<CurrentUser> {
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
+  // A null user here means the cookie is present but invalid (suspended/deleted).
+  // Route through /logout to clear it and avoid a middleware redirect loop.
+  if (!user) redirect("/logout");
   return user;
 }
 
 export async function requireAdmin(): Promise<CurrentUser> {
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/logout");
   if (user.role !== "ADMIN") redirect("/app");
   return user;
 }

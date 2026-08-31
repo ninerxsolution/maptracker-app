@@ -119,15 +119,26 @@ export async function syncNow(): Promise<
       url: q.url,
       source: "usgs",
     }));
-  await chunked(newRows, (b) => db.seismicEvent.createMany({ data: b }));
+  await chunked(newRows, (b) => db.seismicEvent.createMany({ data: b }), 100);
 
-  // Recompute alerts for all zones against recent events.
-  const [zones, recentEvents, existingAlerts] = await Promise.all([
+  // Recompute alerts for all zones against recent events (last 14 days).
+  const recentEvents = await db.seismicEvent.findMany({
+    where: { occurredAt: { gte: new Date(Date.now() - 14 * 86400000) } },
+    select: {
+      id: true,
+      magnitude: true,
+      latitude: true,
+      longitude: true,
+      occurredAt: true,
+    },
+  });
+  const [zones, existingAlerts] = await Promise.all([
     db.watchZone.findMany(),
-    db.seismicEvent.findMany({
-      where: { occurredAt: { gte: new Date(Date.now() - 14 * 86400000) } },
+    // Only the alerts that could collide with the candidate events, not the whole table.
+    db.alertLog.findMany({
+      where: { eventId: { in: recentEvents.map((e) => e.id) } },
+      select: { watchZoneId: true, eventId: true },
     }),
-    db.alertLog.findMany({ select: { watchZoneId: true, eventId: true } }),
   ]);
   const alertKey = new Set(
     existingAlerts.map((a) => `${a.watchZoneId}:${a.eventId}`),
@@ -150,7 +161,6 @@ export async function syncNow(): Promise<
     watchZoneId: string;
     eventId: string;
     magnitude: number | null;
-    createdAt: Date;
   }[] = [];
   for (const z of zones) {
     for (const ev of recentEvents) {
@@ -159,12 +169,12 @@ export async function syncNow(): Promise<
       const key = `${z.id}:${ev.id}`;
       if (alertKey.has(key)) continue;
       alertKey.add(key);
+      // createdAt defaults to now() — this is when the alert fired, not when the quake occurred.
       newAlerts.push({
         userId: z.userId,
         watchZoneId: z.id,
         eventId: ev.id,
         magnitude: ev.magnitude,
-        createdAt: ev.occurredAt,
       });
     }
   }

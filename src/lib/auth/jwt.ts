@@ -13,12 +13,24 @@ const ALG = "HS256";
 export const SESSION_COOKIE = "mt_session";
 export const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 days (seconds)
 
+const KNOWN_PLACEHOLDER_SECRETS = new Set([
+  "change-me-to-a-long-random-string",
+  "dev-only-insecure-secret-change-me-please-0123456789abcdef",
+]);
+
 function getSecret(): Uint8Array {
   const secret = process.env.AUTH_SECRET;
   if (!secret || secret.length < 16) {
     throw new Error(
       "AUTH_SECRET is missing or too short. Set it in your environment (see .env.example).",
     );
+  }
+  if (process.env.NODE_ENV === "production") {
+    if (secret.length < 32 || KNOWN_PLACEHOLDER_SECRETS.has(secret)) {
+      throw new Error(
+        "AUTH_SECRET must be a strong, unique value in production (>=32 chars, not a placeholder). Generate: openssl rand -base64 48",
+      );
+    }
   }
   return new TextEncoder().encode(secret);
 }
