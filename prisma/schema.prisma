@@ -1,0 +1,12 @@
+// MapTracker — Prisma schema
+// Domain models are added in the "database schema & seed" work (issue #2).
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
