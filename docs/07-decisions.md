@@ -59,6 +59,16 @@ analytics/alerts should be single rows referenced by many alerts. See
 (time moved), causing React hydration mismatches. Rendering relative time only
 after mount makes server and first client render agree.
 
+## Hardened via an adversarial review
+
+Before the final polish, the codebase was run through a multi-agent review
+(correctness, security, accessibility, performance), and every confirmed finding
+was fixed or consciously scoped. Notable fixes: a redirect loop for
+suspended-mid-session accounts (now cleared via a `/logout` handler), a login
+`next` open-redirect, production `AUTH_SECRET` strength enforcement, a full
+accessibility pass (reduced-motion, focus-safe mobile drawers, ARIA roles/labels,
+AA contrast), and DB-side aggregation + new indexes for the admin analytics.
+
 ## GitHub-flow delivery
 
 The app was built issue-by-issue: a GitHub milestone with eight issues, each on
