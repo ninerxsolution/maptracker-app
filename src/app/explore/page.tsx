@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { fetchQuakes, type QuakeResponse } from "@/lib/usgs";
+import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth/current-user";
 import { Logo } from "@/components/brand/logo";
 import { ButtonLink } from "@/components/ui/button";
@@ -28,6 +29,15 @@ export default async function ExplorePage() {
       window: "day",
       minMag: 0,
     };
+  }
+
+  let bookmarkedIds: string[] = [];
+  if (user) {
+    const bms = await db.bookmark.findMany({
+      where: { userId: user.id },
+      select: { eventId: true },
+    });
+    bookmarkedIds = bms.map((b) => b.eventId);
   }
 
   return (
@@ -68,7 +78,11 @@ export default async function ExplorePage() {
         </div>
       </header>
 
-      <ExploreClient initial={initial} isAuthed={!!user} />
+      <ExploreClient
+        initial={initial}
+        isAuthed={!!user}
+        bookmarkedIds={bookmarkedIds}
+      />
     </div>
   );
 }

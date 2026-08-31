@@ -21,6 +21,7 @@ import { RelativeTime } from "@/components/ui/relative-time";
 import { Segmented } from "@/components/ui/segmented";
 import { QuakeListItem } from "@/components/quakes/quake-list-item";
 import { QuakeDetail } from "@/components/quakes/quake-detail";
+import { BookmarkButton } from "@/components/quakes/bookmark-button";
 import { QuakeLegend } from "@/components/map/quake-legend";
 import { Spinner } from "@/components/ui/spinner";
 import MapView, { type MapFocus } from "@/components/map/map-view";
@@ -65,11 +66,16 @@ function StatChip({
 export function ExploreClient({
   initial,
   isAuthed,
+  bookmarkedIds = [],
 }: {
   initial: QuakeResponse;
   isAuthed: boolean;
+  bookmarkedIds?: string[];
 }) {
   const [win, setWin] = useState<TimeWindow>(initial.window);
+  const [savedIds, setSavedIds] = useState<Set<string>>(
+    () => new Set(bookmarkedIds),
+  );
   const [minMag, setMinMag] = useState<string>("2.5");
   const [all, setAll] = useState<Quake[]>(initial.quakes);
   const [generated, setGenerated] = useState<number>(initial.generated);
@@ -193,7 +199,27 @@ export function ExploreClient({
         <div className="min-h-0 flex-1 overflow-y-auto">
           {selected && (
             <div className="border-b border-border/70 bg-surface-2/40 p-4">
-              <QuakeDetail quake={selected} onClose={() => setSelectedId(null)} />
+              <QuakeDetail
+                quake={selected}
+                onClose={() => setSelectedId(null)}
+                actions={
+                  isAuthed ? (
+                    <BookmarkButton
+                      key={selected.id}
+                      quake={selected}
+                      saved={savedIds.has(selected.id)}
+                      onToggled={(s) =>
+                        setSavedIds((prev) => {
+                          const next = new Set(prev);
+                          if (s) next.add(selected.id);
+                          else next.delete(selected.id);
+                          return next;
+                        })
+                      }
+                    />
+                  ) : undefined
+                }
+              />
             </div>
           )}
 
