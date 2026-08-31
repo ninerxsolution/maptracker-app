@@ -86,6 +86,7 @@ export default function QuakeMap({
       maxZoom={12}
       scrollWheelZoom
       worldCopyJump
+      preferCanvas
       className="h-full w-full bg-[#0b0e14]"
       style={{ background: "#0b0e14" }}
     >

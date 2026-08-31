@@ -14,7 +14,10 @@ import { REGION_PRESETS, ZONE_COLORS } from "../src/lib/constants";
 
 const db = new PrismaClient();
 
+// Demo password for the seeded members. The admin password can be overridden via
+// env for non-local use. These are demo credentials — never seed a real database.
 const DEMO_PASSWORD = "password123";
+const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD ?? DEMO_PASSWORD;
 
 // ----------------------------- helpers -----------------------------
 function pick<T>(arr: readonly T[]): T {
@@ -201,6 +204,13 @@ const NOTES = [
 async function main() {
   console.log("🌱 Seeding MapTracker…");
 
+  if (process.env.NODE_ENV === "production" && ADMIN_PASSWORD === DEMO_PASSWORD) {
+    console.warn(
+      "⚠  Seeding a PRODUCTION database with the default demo password. " +
+        "Set SEED_ADMIN_PASSWORD (and change member passwords) before any real deployment.",
+    );
+  }
+
   console.log("• Clearing existing data");
   await db.alertLog.deleteMany();
   await db.bookmark.deleteMany();
@@ -209,6 +219,10 @@ async function main() {
   await db.user.deleteMany();
 
   const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 10);
+  const adminHash =
+    ADMIN_PASSWORD === DEMO_PASSWORD
+      ? passwordHash
+      : await bcrypt.hash(ADMIN_PASSWORD, 10);
 
   // --- events ---
   console.log("• Ingesting USGS events");
@@ -233,7 +247,7 @@ async function main() {
     data: {
       email: "admin@maptracker.app",
       name: "Avery Admin",
-      passwordHash,
+      passwordHash: adminHash,
       role: "ADMIN",
       createdAt: daysAgo(90),
       lastLoginAt: daysAgo(0.2),
@@ -417,8 +431,10 @@ async function main() {
   console.log(`  ✓ ${alertRows.length} alert logs`);
 
   console.log("\n✅ Seed complete.");
-  console.log("   Admin  → admin@maptracker.app / password123");
-  console.log("   Member → demo@maptracker.app  / password123");
+  console.log(
+    `   Admin  → admin@maptracker.app / ${ADMIN_PASSWORD === DEMO_PASSWORD ? DEMO_PASSWORD : "(SEED_ADMIN_PASSWORD)"}`,
+  );
+  console.log(`   Member → demo@maptracker.app  / ${DEMO_PASSWORD}`);
 }
 
 main()

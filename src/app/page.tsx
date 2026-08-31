@@ -10,7 +10,8 @@ import {
 } from "lucide-react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
-import { MonitorPreview } from "@/components/site/monitor-preview";
+import { MonitorPreview, type PreviewEvent } from "@/components/site/monitor-preview";
+import { fetchQuakes } from "@/lib/usgs";
 import { ButtonLink } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -55,7 +56,23 @@ const highlights = [
   { icon: ShieldCheck, label: "No API keys required" },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  let liveCount = 0;
+  let events: PreviewEvent[] = [];
+  try {
+    const res = await fetchQuakes("day", 2.5);
+    liveCount = res.count;
+    events = res.quakes.slice(0, 9).map((q) => ({
+      lat: q.lat,
+      lng: q.lng,
+      mag: q.mag,
+      place: q.place,
+      time: q.time,
+    }));
+  } catch {
+    // fall back to the decorative preview
+  }
+
   return (
     <>
       <SiteHeader />
@@ -67,7 +84,9 @@ export default function HomePage() {
             <div className="animate-[fade-up_0.6s_both]">
               <Badge variant="primary" className="mb-5">
                 <span className="live-dot" />
-                Powered by live USGS data
+                {liveCount > 0
+                  ? `${liveCount.toLocaleString()} earthquakes in the last 24h`
+                  : "Powered by live USGS data"}
               </Badge>
               <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-fg sm:text-5xl lg:text-6xl">
                 Track earthquakes
@@ -103,7 +122,7 @@ export default function HomePage() {
             </div>
 
             <div className="animate-[fade-up_0.7s_0.15s_both] lg:pl-6">
-              <MonitorPreview />
+              <MonitorPreview events={events} />
             </div>
           </div>
         </section>

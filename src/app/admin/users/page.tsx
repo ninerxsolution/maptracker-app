@@ -11,6 +11,7 @@ export default async function AdminUsersPage() {
 
   const users = await db.user.findMany({
     orderBy: { createdAt: "desc" },
+    take: 200,
     include: { _count: { select: { watchZones: true, bookmarks: true } } },
   });
 

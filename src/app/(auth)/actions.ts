@@ -13,9 +13,18 @@ export type AuthState = {
 
 function safeNext(next: FormDataEntryValue | null): string | null {
   const v = typeof next === "string" ? next : "";
-  // only same-origin absolute paths, never protocol-relative
-  if (v.startsWith("/") && !v.startsWith("//")) return v;
-  return null;
+  // Must be a same-origin absolute path. Reject protocol-relative ("//"),
+  // backslash tricks ("/\\evil.com"), and control chars / whitespace.
+  if (!v.startsWith("/") || v.startsWith("//") || /[\\\x00-\x1f\s]/.test(v)) {
+    return null;
+  }
+  try {
+    const url = new URL(v, "https://placeholder.local");
+    if (url.origin !== "https://placeholder.local") return null;
+    return url.pathname + url.search;
+  } catch {
+    return null;
+  }
 }
 
 export async function registerAction(

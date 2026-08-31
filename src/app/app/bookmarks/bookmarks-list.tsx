@@ -137,6 +137,7 @@ function BookmarkCard({
               onChange={(e) => setNote(e.target.value)}
               rows={3}
               maxLength={500}
+              aria-label="Bookmark note"
               placeholder="Add your observations…"
               className="w-full resize-none rounded-xl border border-border bg-surface-2 p-2.5 text-sm text-fg placeholder:text-faint focus:border-primary focus-visible:outline-none"
             />

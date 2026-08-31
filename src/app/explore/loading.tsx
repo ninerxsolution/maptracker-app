@@ -4,7 +4,7 @@ import { Logo } from "@/components/brand/logo";
 
 export default function ExploreLoading() {
   return (
-    <div className="flex h-dvh flex-col">
+    <div className="flex h-dvh flex-col" role="status" aria-label="Loading map">
       <header className="flex h-14 shrink-0 items-center justify-between border-b border-border/70 px-4 sm:px-6">
         <Logo />
         <Skeleton className="h-8 w-40" />

@@ -3,7 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/auth/current-user";
-import { zoneSchema, noteSchema, type ZoneInput, type BookmarkInput } from "@/lib/validators";
+import {
+  zoneSchema,
+  noteSchema,
+  bookmarkSchema,
+  type ZoneInput,
+  type BookmarkInput,
+} from "@/lib/validators";
 
 export type ActionResult<T = unknown> =
   | ({ ok: true } & T)
@@ -89,8 +95,12 @@ export async function toggleBookmark(
   input: BookmarkInput,
 ): Promise<ActionResult<{ saved: boolean }>> {
   const user = await requireUser();
+  const parsed = bookmarkSchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: "Invalid event." };
+  const data = parsed.data;
+
   const existing = await db.bookmark.findUnique({
-    where: { userId_eventId: { userId: user.id, eventId: input.eventId } },
+    where: { userId_eventId: { userId: user.id, eventId: data.eventId } },
   });
 
   if (existing) {
@@ -103,13 +113,13 @@ export async function toggleBookmark(
   await db.bookmark.create({
     data: {
       userId: user.id,
-      eventId: input.eventId,
-      magnitude: input.magnitude ?? null,
-      place: input.place ?? null,
-      latitude: input.latitude,
-      longitude: input.longitude,
-      depthKm: input.depthKm ?? null,
-      occurredAt: input.occurredAt,
+      eventId: data.eventId,
+      magnitude: data.magnitude ?? null,
+      place: data.place ?? null,
+      latitude: data.latitude,
+      longitude: data.longitude,
+      depthKm: data.depthKm ?? null,
+      occurredAt: data.occurredAt,
     },
   });
   revalidatePath("/app/bookmarks");

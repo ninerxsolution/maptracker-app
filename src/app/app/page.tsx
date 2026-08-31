@@ -62,11 +62,14 @@ export default async function DashboardPage() {
 
   // Personalized feed: recent quakes inside the user's zones.
   let inZone: ReturnType<typeof quakesInZones> = [];
-  try {
-    const { quakes } = await fetchQuakes("week", 0);
-    inZone = quakesInZones(quakes, zoneLikes);
-  } catch {
-    inZone = [];
+  if (zoneLikes.length > 0) {
+    try {
+      // M2.5+ over the last week — enough for the glance without pulling the full feed.
+      const { quakes } = await fetchQuakes("week", 2.5);
+      inZone = quakesInZones(quakes, zoneLikes);
+    } catch {
+      inZone = [];
+    }
   }
 
   const firstName = user.name.split(" ")[0];
