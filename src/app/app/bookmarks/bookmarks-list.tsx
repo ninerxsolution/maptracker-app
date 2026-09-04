@@ -78,7 +78,7 @@ function BookmarkCard({
       }
       onNoteSaved(note.trim() || null);
       setEditing(false);
-      toast.success("Note saved.");
+      toast.success("บันทึกโน้ตแล้ว");
     });
   }
 
@@ -89,7 +89,7 @@ function BookmarkCard({
         toast.error(res.error);
         return;
       }
-      toast.success("Bookmark removed.");
+      toast.success("ลบบุ๊กมาร์กแล้ว");
       onRemoved();
     });
   }
@@ -100,7 +100,7 @@ function BookmarkCard({
         <MagBadge mag={b.magnitude} />
         <div className="min-w-0 flex-1">
           <p className="truncate font-medium text-fg">
-            {b.place ?? "Unknown location"}
+            {b.place ?? "ไม่ทราบตำแหน่ง"}
           </p>
           <p className="text-xs text-faint">
             <RelativeTime value={b.occurredAt} />
@@ -109,7 +109,7 @@ function BookmarkCard({
         <button
           onClick={() => setConfirming(true)}
           className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-faint hover:bg-surface-2 hover:text-danger"
-          aria-label="Remove bookmark"
+          aria-label="ลบบุ๊กมาร์ก"
         >
           <Trash2 className="h-4 w-4" />
         </button>
@@ -137,14 +137,14 @@ function BookmarkCard({
               onChange={(e) => setNote(e.target.value)}
               rows={3}
               maxLength={500}
-              aria-label="Bookmark note"
-              placeholder="Add your observations…"
+              aria-label="โน้ตบุ๊กมาร์ก"
+              placeholder="เพิ่มข้อสังเกตของคุณ…"
               className="w-full resize-none rounded-xl border border-border bg-surface-2 p-2.5 text-sm text-fg placeholder:text-faint focus:border-primary focus-visible:outline-none"
             />
             <div className="flex gap-2">
               <Button size="sm" onClick={saveNote} loading={pending}>
                 {!pending && <Check className="h-3.5 w-3.5" />}
-                Save
+                บันทึก
               </Button>
               <Button
                 size="sm"
@@ -154,7 +154,7 @@ function BookmarkCard({
                   setEditing(false);
                 }}
               >
-                Cancel
+                ยกเลิก
               </Button>
             </div>
           </div>
@@ -173,7 +173,7 @@ function BookmarkCard({
             className="inline-flex items-center gap-1.5 text-sm text-faint transition-colors hover:text-primary"
           >
             <StickyNote className="h-3.5 w-3.5" />
-            Add a note
+            เพิ่มโน้ต
           </button>
         )}
       </div>
@@ -185,17 +185,17 @@ function BookmarkCard({
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
         >
-          View on USGS
+          ดูบน USGS
           <ExternalLink className="h-3 w-3" />
         </a>
         {confirming && (
           <div className="flex items-center gap-1.5">
-            <span className="text-xs text-danger">Remove?</span>
+            <span className="text-xs text-danger">ลบ?</span>
             <Button size="sm" variant="danger" loading={pending} onClick={remove}>
-              Yes
+              ใช่
             </Button>
             <Button size="sm" variant="ghost" onClick={() => setConfirming(false)}>
-              No
+              ไม่
             </Button>
           </div>
         )}

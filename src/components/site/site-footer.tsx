@@ -10,30 +10,30 @@ export function SiteFooter() {
           <div className="max-w-sm">
             <Logo />
             <p className="mt-4 text-sm leading-relaxed text-muted">
-              Real-time global earthquake monitoring on an interactive map.
-              Watch the regions you care about and never miss significant
-              seismic activity.
+              เฝ้าติดตามแผ่นดินไหวทั่วโลกแบบเรียลไทม์บนแผนที่แบบโต้ตอบ
+              เฝ้าระวังภูมิภาคที่คุณสนใจ
+              และไม่พลาดกิจกรรมแผ่นดินไหวที่มีนัยสำคัญ
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-10 sm:grid-cols-3">
             <FooterCol
-              title="Product"
+              title="ผลิตภัณฑ์"
               links={[
-                { href: "/explore", label: "Explore map" },
-                { href: "/register", label: "Create account" },
-                { href: "/login", label: "Sign in" },
+                { href: "/explore", label: "สำรวจแผนที่" },
+                { href: "/register", label: "สร้างบัญชี" },
+                { href: "/login", label: "เข้าสู่ระบบ" },
               ]}
             />
             <FooterCol
-              title="Learn"
+              title="เรียนรู้"
               links={[
-                { href: "/#features", label: "Features" },
-                { href: "/#data", label: "How it works" },
+                { href: "/#features", label: "ฟีเจอร์" },
+                { href: "/#data", label: "วิธีการทำงาน" },
               ]}
             />
             <div>
-              <h4 className="text-sm font-semibold text-fg">Data source</h4>
+              <h4 className="text-sm font-semibold text-fg">แหล่งข้อมูล</h4>
               <a
                 href="https://earthquake.usgs.gov/"
                 target="_blank"
@@ -49,8 +49,8 @@ export function SiteFooter() {
 
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-border/70 pt-6 text-sm text-faint sm:flex-row">
           <p>
-            © {new Date().getFullYear()} MapTracker. Seismic data courtesy of the
-            U.S. Geological Survey.
+            © {new Date().getFullYear()} MapTracker
+            ข้อมูลแผ่นดินไหวได้รับความอนุเคราะห์จาก U.S. Geological Survey
           </p>
           <a
             href="https://github.com/ninerxsolution/maptracker-app"
@@ -59,7 +59,7 @@ export function SiteFooter() {
             className="inline-flex items-center gap-1.5 transition-colors hover:text-fg"
           >
             <Code2 className="h-4 w-4" />
-            Source
+            ซอร์สโค้ด
           </a>
         </div>
       </div>

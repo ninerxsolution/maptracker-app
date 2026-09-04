@@ -7,7 +7,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { PageHeader } from "@/components/app/page-header";
 import { AlertsList, type AlertRow } from "./alerts-list";
 
-export const metadata = { title: "Alerts" };
+export const metadata = { title: "การแจ้งเตือน" };
 
 export default async function AlertsPage() {
   const user = await requireUser();
@@ -32,18 +32,18 @@ export default async function AlertsPage() {
   return (
     <Container className="max-w-3xl space-y-6 py-6">
       <PageHeader
-        title="Alerts"
-        description="Events that matched one of your watch zones."
+        title="การแจ้งเตือน"
+        description="เหตุการณ์ที่ตรงกับโซนเฝ้าระวังของคุณ"
       />
 
       {rows.length === 0 ? (
         <EmptyState
           icon={BellOff}
-          title="No alerts yet"
-          body="When an earthquake occurs inside one of your watch zones above its alert threshold, it shows up here."
+          title="ยังไม่มีการแจ้งเตือน"
+          body="เมื่อเกิดแผ่นดินไหวภายในโซนเฝ้าระวังของคุณเกินเกณฑ์แจ้งเตือน จะแสดงที่นี่"
           action={
             <ButtonLink href="/app/zones" size="sm">
-              Set up a watch zone
+              ตั้งค่าโซนเฝ้าระวัง
             </ButtonLink>
           }
         />

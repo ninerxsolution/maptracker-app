@@ -51,7 +51,7 @@ export function ContentModeration({
       if (!res.ok) { toast.error(res.error); return; }
       setZ((xs) => xs.filter((x) => x.id !== id));
       setConfirmId(null);
-      toast.success("Zone removed.");
+      toast.success("ลบโซนแล้ว");
     });
   }
   function removeBookmark(id: string) {
@@ -60,7 +60,7 @@ export function ContentModeration({
       if (!res.ok) { toast.error(res.error); return; }
       setB((xs) => xs.filter((x) => x.id !== id));
       setConfirmId(null);
-      toast.success("Bookmark removed.");
+      toast.success("ลบบุ๊กมาร์กแล้ว");
     });
   }
 
@@ -70,16 +70,16 @@ export function ContentModeration({
         value={tab}
         onChange={setTab}
         options={[
-          { value: "zones", label: `Watch zones (${z.length})` },
-          { value: "bookmarks", label: `Bookmarks (${b.length})` },
+          { value: "zones", label: `โซนเฝ้าระวัง (${z.length})` },
+          { value: "bookmarks", label: `บุ๊กมาร์ก (${b.length})` },
         ]}
         className="max-w-md"
-        ariaLabel="Content type"
+        ariaLabel="ประเภทเนื้อหา"
       />
 
       {tab === "zones" ? (
         z.length === 0 ? (
-          <EmptyState icon={Radar} title="No watch zones" />
+          <EmptyState icon={Radar} title="ไม่มีโซนเฝ้าระวัง" />
         ) : (
           <ul className="divide-y divide-border/50 overflow-hidden rounded-2xl border border-border">
             {z.map((zone) => (
@@ -109,7 +109,7 @@ export function ContentModeration({
           </ul>
         )
       ) : b.length === 0 ? (
-        <EmptyState icon={Bookmark} title="No bookmarks" />
+        <EmptyState icon={Bookmark} title="ไม่มีบุ๊กมาร์ก" />
       ) : (
         <ul className="divide-y divide-border/50 overflow-hidden rounded-2xl border border-border">
           {b.map((bm) => (
@@ -117,7 +117,7 @@ export function ContentModeration({
               <MagBadge mag={bm.magnitude} size="sm" />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-fg">
-                  {bm.place ?? "Unknown location"}
+                  {bm.place ?? "ไม่ทราบตำแหน่ง"}
                 </p>
                 <p className="truncate text-xs text-faint">
                   {bm.ownerName} ({bm.ownerEmail}) ·{" "}
@@ -157,10 +157,10 @@ function RemoveCell({
     return (
       <div className="flex items-center gap-1.5">
         <Button size="sm" variant="danger" loading={pending} onClick={onConfirm}>
-          Delete
+          ลบ
         </Button>
         <Button size="sm" variant="ghost" onClick={onCancel}>
-          Cancel
+          ยกเลิก
         </Button>
       </div>
     );
@@ -169,7 +169,7 @@ function RemoveCell({
     <button
       onClick={onAsk}
       className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-faint transition-colors hover:bg-surface-2 hover:text-danger"
-      aria-label="Remove"
+      aria-label="ลบ"
     >
       <Trash2 className="h-4 w-4" />
     </button>

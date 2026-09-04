@@ -21,7 +21,7 @@ export function LogoutButton({
         )}
       >
         <LogOut className="h-4 w-4" />
-        {!compact && "Sign out"}
+        {!compact && "ออกจากระบบ"}
       </button>
     </form>
   );

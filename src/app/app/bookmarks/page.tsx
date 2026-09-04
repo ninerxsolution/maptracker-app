@@ -7,7 +7,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { PageHeader } from "@/components/app/page-header";
 import { BookmarksList, type BookmarkRow } from "./bookmarks-list";
 
-export const metadata = { title: "Bookmarks" };
+export const metadata = { title: "บุ๊กมาร์ก" };
 
 export default async function BookmarksPage() {
   const user = await requireUser();
@@ -32,18 +32,18 @@ export default async function BookmarksPage() {
   return (
     <Container className="space-y-6 py-6">
       <PageHeader
-        title="Bookmarks"
-        description={`${rows.length} saved ${rows.length === 1 ? "event" : "events"}`}
+        title="บุ๊กมาร์ก"
+        description={`${rows.length} เหตุการณ์ที่บันทึกไว้`}
       />
 
       {rows.length === 0 ? (
         <EmptyState
           icon={Bookmark}
-          title="No bookmarks yet"
-          body="Save notable earthquakes from the live map to revisit them here with your own notes."
+          title="ยังไม่มีบุ๊กมาร์ก"
+          body="บันทึกแผ่นดินไหวที่น่าสนใจจากแผนที่สด เพื่อกลับมาดูที่นี่พร้อมโน้ตของคุณเอง"
           action={
             <ButtonLink href="/explore" size="sm">
-              Explore the map
+              สำรวจแผนที่
             </ButtonLink>
           }
         />

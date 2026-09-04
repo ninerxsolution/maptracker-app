@@ -24,7 +24,7 @@ import { MagBadge } from "@/components/quakes/mag-badge";
 import { RelativeTime } from "@/components/ui/relative-time";
 import MapView from "@/components/map/map-view";
 
-export const metadata = { title: "Dashboard" };
+export const metadata = { title: "แดชบอร์ด" };
 
 export default async function DashboardPage() {
   const user = await requireUser();
@@ -77,33 +77,33 @@ export default async function DashboardPage() {
   return (
     <Container className="space-y-6 py-6">
       <PageHeader
-        title={`Welcome back, ${firstName}`}
-        description="Your seismic watch at a glance."
+        title={`ยินดีต้อนรับกลับ ${firstName}`}
+        description="ภาพรวมการเฝ้าระวังแผ่นดินไหวของคุณ"
         actions={
           <ButtonLink href="/app/zones" size="sm">
             <Plus className="h-4 w-4" />
-            New watch zone
+            โซนเฝ้าระวังใหม่
           </ButtonLink>
         }
       />
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatTile label="Watch zones" value={zones.length} icon={Radar} />
+        <StatTile label="โซนเฝ้าระวัง" value={zones.length} icon={Radar} />
         <StatTile
-          label="Bookmarks"
+          label="บุ๊กมาร์ก"
           value={bookmarksCount}
           icon={Bookmark}
           accent="success"
         />
         <StatTile
-          label="Unread alerts"
+          label="การแจ้งเตือนที่ยังไม่อ่าน"
           value={unread}
           icon={BellRing}
           accent={unread > 0 ? "danger" : "muted"}
         />
         <StatTile
-          label="In-zone activity (7d)"
+          label="กิจกรรมในโซน (7 วัน)"
           value={inZone.length}
           icon={Activity}
           accent="warning"
@@ -117,25 +117,25 @@ export default async function DashboardPage() {
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <MapPinned className="h-4 w-4 text-primary" />
-                Your watch zones
+                โซนเฝ้าระวังของคุณ
               </CardTitle>
               <Link
                 href="/app/zones"
                 className="text-sm text-primary hover:underline"
               >
-                Manage
+                จัดการ
               </Link>
             </CardHeader>
             {zones.length === 0 ? (
               <div className="p-5 pt-0">
                 <EmptyState
                   icon={Radar}
-                  title="No watch zones yet"
-                  body="Create a zone over a region you care about to track seismic activity and get alerts."
+                  title="ยังไม่มีโซนเฝ้าระวัง"
+                  body="สร้างโซนครอบคลุมพื้นที่ที่คุณสนใจ เพื่อติดตามการเกิดแผ่นดินไหวและรับการแจ้งเตือน"
                   action={
                     <ButtonLink href="/app/zones" size="sm">
                       <Plus className="h-4 w-4" />
-                      Create a zone
+                      สร้างโซน
                     </ButtonLink>
                   }
                 />
@@ -151,15 +151,15 @@ export default async function DashboardPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Activity className="h-4 w-4 text-warning" />
-                Recent activity in your zones
+                กิจกรรมล่าสุดในโซนของคุณ
               </CardTitle>
             </CardHeader>
             <div className="px-2 pb-2">
               {inZone.length === 0 ? (
                 <p className="px-3 py-6 text-center text-sm text-muted">
                   {zones.length === 0
-                    ? "Create a zone to start tracking activity."
-                    : "No qualifying events in your zones this week — all quiet."}
+                    ? "สร้างโซนเพื่อเริ่มติดตามกิจกรรม"
+                    : "ไม่มีเหตุการณ์ที่เข้าเกณฑ์ในโซนของคุณสัปดาห์นี้ — เงียบสงบ"}
                 </p>
               ) : (
                 <ul className="divide-y divide-border/50">
@@ -171,7 +171,7 @@ export default async function DashboardPage() {
                       <MagBadge mag={q.mag} size="sm" />
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium text-fg">
-                          {q.place ?? "Unknown location"}
+                          {q.place ?? "ไม่ทราบตำแหน่ง"}
                         </p>
                         <p className="text-xs text-faint">
                           <RelativeTime value={q.time} />
@@ -191,19 +191,19 @@ export default async function DashboardPage() {
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <BellRing className="h-4 w-4 text-danger" />
-                Recent alerts
+                การแจ้งเตือนล่าสุด
               </CardTitle>
               <Link
                 href="/app/alerts"
                 className="text-sm text-primary hover:underline"
               >
-                All
+                ทั้งหมด
               </Link>
             </CardHeader>
             <div className="px-2 pb-2">
               {recentAlerts.length === 0 ? (
                 <p className="px-3 py-6 text-center text-sm text-muted">
-                  No alerts yet.
+                  ยังไม่มีการแจ้งเตือน
                 </p>
               ) : (
                 <ul className="divide-y divide-border/50">
@@ -212,7 +212,7 @@ export default async function DashboardPage() {
                       <MagBadge mag={a.magnitude} size="sm" />
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium text-fg">
-                          {a.event.place ?? "Unknown location"}
+                          {a.event.place ?? "ไม่ทราบตำแหน่ง"}
                         </p>
                         <p className="truncate text-xs text-faint">
                           {a.watchZone.name} · {relativeTime(a.createdAt)}
@@ -232,21 +232,21 @@ export default async function DashboardPage() {
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <Bookmark className="h-4 w-4 text-success" />
-                Bookmarks
+                บุ๊กมาร์ก
               </CardTitle>
               <Link
                 href="/app/bookmarks"
                 className="text-sm text-primary hover:underline"
               >
-                All
+                ทั้งหมด
               </Link>
             </CardHeader>
             <div className="px-2 pb-2">
               {recentBookmarks.length === 0 ? (
                 <p className="px-3 py-6 text-center text-sm text-muted">
-                  No bookmarks yet.{" "}
+                  ยังไม่มีบุ๊กมาร์ก{" "}
                   <Link href="/explore" className="text-primary hover:underline">
-                    Explore the map
+                    สำรวจแผนที่
                   </Link>
                 </p>
               ) : (
@@ -256,7 +256,7 @@ export default async function DashboardPage() {
                       <MagBadge mag={b.magnitude} size="sm" />
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium text-fg">
-                          {b.place ?? "Unknown location"}
+                          {b.place ?? "ไม่ทราบตำแหน่ง"}
                         </p>
                         <p className="truncate text-xs text-faint">
                           {relativeTime(b.occurredAt)}
@@ -270,7 +270,7 @@ export default async function DashboardPage() {
           </Card>
 
           <ButtonLink href="/explore" variant="outline" className="w-full">
-            Open the live map
+            เปิดแผนที่สด
             <ArrowRight className="h-4 w-4" />
           </ButtonLink>
         </div>

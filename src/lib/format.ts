@@ -1,17 +1,18 @@
 import { formatDistanceToNowStrict } from "date-fns";
+import { th } from "date-fns/locale";
 
 type TimeInput = number | string | Date | null | undefined;
 
 export function relativeTime(input: TimeInput): string {
   if (input == null) return "—";
   const date = input instanceof Date ? input : new Date(input);
-  return formatDistanceToNowStrict(date, { addSuffix: true });
+  return formatDistanceToNowStrict(date, { addSuffix: true, locale: th });
 }
 
 export function dateTime(input: TimeInput): string {
   if (input == null) return "—";
   const date = input instanceof Date ? input : new Date(input);
-  return date.toLocaleString(undefined, {
+  return date.toLocaleString("th-TH-u-ca-gregory", {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -21,7 +22,7 @@ export function dateTime(input: TimeInput): string {
 }
 
 export function compactNumber(n: number): string {
-  return new Intl.NumberFormat(undefined, {
+  return new Intl.NumberFormat("en", {
     notation: "compact",
     maximumFractionDigits: 1,
   }).format(n);
@@ -29,5 +30,5 @@ export function compactNumber(n: number): string {
 
 export function depthLabel(depthKm: number | null | undefined): string {
   if (depthKm == null) return "—";
-  return `${depthKm.toFixed(0)} km deep`;
+  return `ลึก ${depthKm.toFixed(0)} กม.`;
 }

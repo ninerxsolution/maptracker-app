@@ -28,14 +28,14 @@ import MapView, { type MapFocus } from "@/components/map/map-view";
 import { cn } from "@/lib/utils";
 
 const WINDOW_OPTIONS: { value: TimeWindow; label: string }[] = [
-  { value: "hour", label: "Hour" },
-  { value: "day", label: "Day" },
-  { value: "week", label: "Week" },
-  { value: "month", label: "Month" },
+  { value: "hour", label: "ชั่วโมง" },
+  { value: "day", label: "วัน" },
+  { value: "week", label: "สัปดาห์" },
+  { value: "month", label: "เดือน" },
 ];
 
 const MAG_OPTIONS = [
-  { value: "0", label: "All" },
+  { value: "0", label: "ทั้งหมด" },
   { value: "2.5", label: "2.5+" },
   { value: "4.5", label: "4.5+" },
   { value: "6", label: "6+" },
@@ -103,7 +103,7 @@ export function ExploreClient({
         setGenerated(data.generated);
       } catch {
         if (my === reqId.current) {
-          setError("Couldn't reach the USGS feed. Retrying shortly…");
+          setError("ไม่สามารถเชื่อมต่อฟีด USGS ได้ กำลังลองใหม่ในไม่ช้า…");
         }
       } finally {
         if (my === reqId.current) setLoading(false);
@@ -151,20 +151,20 @@ export function ExploreClient({
           <div className="flex items-center justify-between">
             <h1 className="flex items-center gap-2 font-display text-lg font-bold text-fg">
               <Radio className="h-4 w-4 text-primary" />
-              Live earthquakes
+              แผ่นดินไหวสด
             </h1>
             <button
               onClick={() => load(win)}
               disabled={loading}
               className="grid h-8 w-8 place-items-center rounded-lg text-muted transition-colors hover:bg-surface-2 hover:text-fg disabled:opacity-50"
-              aria-label="Refresh"
+              aria-label="รีเฟรช"
             >
               <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
             </button>
           </div>
           <p className="mt-1 flex items-center gap-1.5 text-xs text-faint">
             <span className="live-dot" />
-            {quakes.length.toLocaleString()} events · updated{" "}
+            {quakes.length.toLocaleString()} เหตุการณ์ · อัปเดตเมื่อ{" "}
             <RelativeTime value={generated} />
           </p>
 
@@ -174,33 +174,33 @@ export function ExploreClient({
               onChange={setWin}
               options={WINDOW_OPTIONS}
               size="sm"
-              ariaLabel="Time window"
+              ariaLabel="ช่วงเวลา"
             />
             <Segmented
               value={minMag}
               onChange={setMinMag}
               options={MAG_OPTIONS}
               size="sm"
-              ariaLabel="Minimum magnitude"
+              ariaLabel="ขนาดขั้นต่ำ"
             />
           </div>
 
           <div className="mt-3 grid grid-cols-3 gap-2">
             <StatChip
               icon={Activity}
-              label="Max"
+              label="สูงสุด"
               value={stats.maxMag ? `M${formatMagnitude(stats.maxMag)}` : "—"}
               accent="var(--color-primary)"
             />
             <StatChip
               icon={TriangleAlert}
-              label="Significant"
+              label="มีนัยสำคัญ"
               value={compactNumber(stats.significant)}
               accent="var(--color-warning)"
             />
             <StatChip
               icon={Users}
-              label="Felt"
+              label="รายงานการรู้สึก"
               value={compactNumber(stats.felt)}
               accent="var(--color-success)"
             />
@@ -238,22 +238,22 @@ export function ExploreClient({
           {error ? (
             <EmptyState
               icon={ServerCrash}
-              title="Connection issue"
+              title="ปัญหาการเชื่อมต่อ"
               body={error}
               action={
                 <button
                   onClick={() => load(win)}
                   className="text-sm font-medium text-primary hover:underline"
                 >
-                  Try again
+                  ลองอีกครั้ง
                 </button>
               }
             />
           ) : quakes.length === 0 ? (
             <EmptyState
               icon={SearchX}
-              title="No events match"
-              body="No earthquakes in this window at the selected magnitude. Try widening the filters."
+              title="ไม่มีเหตุการณ์ที่ตรงกัน"
+              body="ไม่มีแผ่นดินไหวในช่วงเวลานี้ที่ขนาดที่เลือก ลองขยายตัวกรอง"
             />
           ) : (
             <ul className="divide-y divide-border/50">
@@ -268,9 +268,9 @@ export function ExploreClient({
               ))}
               {quakes.length > 200 && (
                 <li className="px-3 py-3 text-center text-xs text-faint">
-                  Showing the 200 most recent of{" "}
-                  {quakes.length.toLocaleString()} events. All are plotted on the
-                  map.
+                  แสดง 200 เหตุการณ์ล่าสุดจากทั้งหมด{" "}
+                  {quakes.length.toLocaleString()} เหตุการณ์ ทั้งหมด{" "}
+                  แสดงบนแผนที่
                 </li>
               )}
             </ul>
@@ -284,7 +284,7 @@ export function ExploreClient({
               className="flex items-center justify-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-4 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-primary/15"
             >
               <LogIn className="h-4 w-4" />
-              Sign in to save events & watch zones
+              เข้าสู่ระบบเพื่อบันทึกเหตุการณ์และโซนเฝ้าระวัง
             </Link>
           </div>
         )}
@@ -307,12 +307,12 @@ export function ExploreClient({
           {loading && (
             <span className="glass inline-flex items-center gap-2 rounded-full border border-border/70 px-3 py-1.5 text-xs text-muted">
               <Spinner className="h-3.5 w-3.5 text-primary" />
-              Updating…
+              กำลังอัปเดต…
             </span>
           )}
         </div>
         <p className="pointer-events-none absolute bottom-1 right-2 z-[500] text-[10px] text-faint/70">
-          Data: USGS · Tiles: CARTO/OSM
+          ข้อมูล: USGS · ไทล์: CARTO/OSM
         </p>
       </div>
     </div>

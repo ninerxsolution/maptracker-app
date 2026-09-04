@@ -4,7 +4,7 @@ import { Container } from "@/components/ui/container";
 import { PageHeader } from "@/components/app/page-header";
 import { UsersTable, type UserRow } from "./users-table";
 
-export const metadata = { title: "Users" };
+export const metadata = { title: "ผู้ใช้" };
 
 export default async function AdminUsersPage() {
   const admin = await requireAdmin();
@@ -30,8 +30,8 @@ export default async function AdminUsersPage() {
   return (
     <Container className="space-y-6 py-6">
       <PageHeader
-        title="Users"
-        description="Manage roles, suspend accounts, and remove members."
+        title="ผู้ใช้"
+        description="จัดการบทบาท ระงับบัญชี และลบสมาชิก"
       />
       <UsersTable initial={rows} currentUserId={admin.id} />
     </Container>

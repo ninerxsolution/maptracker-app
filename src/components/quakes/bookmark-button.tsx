@@ -39,7 +39,7 @@ export function BookmarkButton({
       }
       setSaved(res.saved);
       onToggled?.(res.saved);
-      toast.success(res.saved ? "Saved to bookmarks" : "Removed from bookmarks");
+      toast.success(res.saved ? "บันทึกลงบุ๊กมาร์กแล้ว" : "ลบออกจากบุ๊กมาร์กแล้ว");
     });
   }
 
@@ -59,7 +59,7 @@ export function BookmarkButton({
       ) : (
         <Bookmark className="h-4 w-4" />
       )}
-      {saved ? "Saved" : "Save event"}
+      {saved ? "บันทึกแล้ว" : "บันทึกเหตุการณ์"}
     </button>
   );
 }

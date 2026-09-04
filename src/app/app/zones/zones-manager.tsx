@@ -121,11 +121,11 @@ export function ZonesManager({
 
   function save() {
     if (!form.center) {
-      toast.error("Set a center — click the map or choose a region.");
+      toast.error("กำหนดจุดศูนย์กลาง — คลิกบนแผนที่หรือเลือกภูมิภาค");
       return;
     }
     if (!form.name.trim()) {
-      toast.error("Give your zone a name.");
+      toast.error("ตั้งชื่อให้โซนของคุณ");
       return;
     }
     const input = {
@@ -148,10 +148,10 @@ export function ZonesManager({
       }
       if (mode === "edit" && editingId) {
         setZones((zs) => zs.map((z) => (z.id === editingId ? res.zone : z)));
-        toast.success("Zone updated.");
+        toast.success("อัปเดตโซนแล้ว");
       } else {
         setZones((zs) => [res.zone, ...zs]);
-        toast.success("Watch zone created.");
+        toast.success("สร้างโซนเฝ้าระวังแล้ว");
       }
       cancel();
     });
@@ -167,7 +167,7 @@ export function ZonesManager({
       setZones((zs) => zs.filter((z) => z.id !== id));
       setConfirmId(null);
       if (editingId === id) cancel();
-      toast.success("Zone deleted.");
+      toast.success("ลบโซนแล้ว");
     });
   }
 
@@ -179,14 +179,14 @@ export function ZonesManager({
           <div>
             <h1 className="flex items-center gap-2 font-display text-lg font-bold text-fg">
               <Radar className="h-4 w-4 text-primary" />
-              Watch zones
+              โซนเฝ้าระวัง
             </h1>
-            <p className="text-xs text-faint">{zones.length} configured</p>
+            <p className="text-xs text-faint">ตั้งค่าไว้ {zones.length} รายการ</p>
           </div>
           {mode === "idle" && (
             <Button size="sm" onClick={startCreate}>
               <Plus className="h-4 w-4" />
-              New
+              ใหม่
             </Button>
           )}
         </div>
@@ -197,12 +197,12 @@ export function ZonesManager({
               <div className="p-4">
                 <EmptyState
                   icon={Radar}
-                  title="No watch zones"
-                  body="Create a zone over a region to track seismic activity there."
+                  title="ไม่มีโซนเฝ้าระวัง"
+                  body="สร้างโซนครอบคลุมพื้นที่เพื่อติดตามการเกิดแผ่นดินไหวในบริเวณนั้น"
                   action={
                     <Button size="sm" onClick={startCreate}>
                       <Plus className="h-4 w-4" />
-                      Create a zone
+                      สร้างโซน
                     </Button>
                   }
                 />
@@ -233,14 +233,14 @@ export function ZonesManager({
                         <button
                           onClick={() => startEdit(z)}
                           className="grid h-8 w-8 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-fg"
-                          aria-label="Edit zone"
+                          aria-label="แก้ไขโซน"
                         >
                           <Pencil className="h-4 w-4" />
                         </button>
                         <button
                           onClick={() => setConfirmId(z.id)}
                           className="grid h-8 w-8 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-danger"
-                          aria-label="Delete zone"
+                          aria-label="ลบโซน"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -248,21 +248,21 @@ export function ZonesManager({
                     </div>
                     {confirmId === z.id && (
                       <div className="mt-2 flex items-center gap-2 rounded-lg border border-danger/30 bg-danger/10 p-2 text-xs">
-                        <span className="flex-1 text-danger">Delete this zone?</span>
+                        <span className="flex-1 text-danger">ลบโซนนี้?</span>
                         <Button
                           size="sm"
                           variant="danger"
                           loading={pending}
                           onClick={() => remove(z.id)}
                         >
-                          Delete
+                          ลบ
                         </Button>
                         <Button
                           size="sm"
                           variant="ghost"
                           onClick={() => setConfirmId(null)}
                         >
-                          Cancel
+                          ยกเลิก
                         </Button>
                       </div>
                     )}
@@ -290,7 +290,7 @@ export function ZonesManager({
           <div className="pointer-events-none absolute left-1/2 top-3 z-[500] -translate-x-1/2">
             <span className="glass inline-flex items-center gap-2 rounded-full border border-border/70 px-3 py-1.5 text-xs text-fg">
               <MousePointerClick className="h-3.5 w-3.5 text-primary" />
-              Click the map to place the zone center
+              คลิกบนแผนที่เพื่อวางจุดศูนย์กลางโซน
             </span>
           </div>
         )}
@@ -326,19 +326,19 @@ function ZoneForm({
   return (
     <div className="space-y-4 p-4">
       <p className="text-sm font-semibold text-fg">
-        {mode === "edit" ? "Edit zone" : "New watch zone"}
+        {mode === "edit" ? "แก้ไขโซน" : "โซนเฝ้าระวังใหม่"}
       </p>
 
       <TextField
-        label="Zone name"
+        label="ชื่อโซน"
         value={form.name}
         onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-        placeholder="e.g. Home region"
+        placeholder="เช่น พื้นที่บ้าน"
         name="name"
       />
 
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-fg">Center</label>
+        <label className="mb-1.5 block text-sm font-medium text-fg">จุดศูนย์กลาง</label>
         <div className="flex items-center gap-2 rounded-xl border border-border bg-surface-2 px-3 py-2 text-sm">
           <MapPin className="h-4 w-4 text-faint" />
           {form.center ? (
@@ -346,11 +346,11 @@ function ZoneForm({
               {form.center.lat.toFixed(2)}, {form.center.lng.toFixed(2)}
             </span>
           ) : (
-            <span className="text-faint">Click the map or pick a region</span>
+            <span className="text-faint">คลิกบนแผนที่หรือเลือกภูมิภาค</span>
           )}
         </div>
         <select
-          aria-label="Jump to a preset region"
+          aria-label="ไปยังภูมิภาคที่กำหนดไว้"
           className="mt-2 h-10 w-full rounded-xl border border-border bg-surface-2 px-3 text-sm text-fg focus:border-primary focus-visible:outline-none"
           value=""
           onChange={(e) => {
@@ -358,7 +358,7 @@ function ZoneForm({
             if (p) onPreset(p);
           }}
         >
-          <option value="">Jump to a region…</option>
+          <option value="">ไปยังภูมิภาค…</option>
           {REGION_PRESETS.map((p) => (
             <option key={p.name} value={p.name}>
               {p.name}
@@ -369,7 +369,7 @@ function ZoneForm({
 
       <div>
         <label className="mb-1.5 flex items-center justify-between text-sm font-medium text-fg">
-          <span>Radius</span>
+          <span>รัศมี</span>
           <span className="tabular text-muted">
             {form.radiusKm.toLocaleString()} km
           </span>
@@ -383,7 +383,7 @@ function ZoneForm({
           onChange={(e) =>
             setForm((f) => ({ ...f, radiusKm: Number(e.target.value) }))
           }
-          aria-label="Zone radius in kilometres"
+          aria-label="รัศมีโซนเป็นกิโลเมตร"
           aria-valuetext={`${form.radiusKm} km`}
           className="w-full accent-[var(--color-primary)]"
         />
@@ -391,19 +391,19 @@ function ZoneForm({
 
       <div>
         <label className="mb-1.5 block text-sm font-medium text-fg">
-          Alert threshold
+          เกณฑ์แจ้งเตือน
         </label>
         <Segmented
           value={form.minMagnitude}
           onChange={(v) => setForm((f) => ({ ...f, minMagnitude: v }))}
           options={MAG_OPTS}
           size="sm"
-          ariaLabel="Alert threshold magnitude"
+          ariaLabel="ขนาดเกณฑ์แจ้งเตือน"
         />
       </div>
 
       <div>
-        <label className="mb-1.5 block text-sm font-medium text-fg">Colour</label>
+        <label className="mb-1.5 block text-sm font-medium text-fg">สี</label>
         <div className="flex flex-wrap gap-2">
           {ZONE_COLORS.map((c) => (
             <button
@@ -415,7 +415,7 @@ function ZoneForm({
                 form.color === c && "ring-2 ring-white ring-offset-2 ring-offset-surface",
               )}
               style={{ background: c }}
-              aria-label={`Colour ${c}`}
+              aria-label={`สี ${c}`}
             >
               {form.color === c && (
                 <Check className="mx-auto h-4 w-4 text-black/70" />
@@ -428,11 +428,11 @@ function ZoneForm({
       <div className="flex gap-2 pt-1">
         <Button className="flex-1" onClick={onSave} loading={pending}>
           {!pending && <Check className="h-4 w-4" />}
-          {mode === "edit" ? "Save changes" : "Create zone"}
+          {mode === "edit" ? "บันทึกการเปลี่ยนแปลง" : "สร้างโซน"}
         </Button>
         <Button variant="ghost" onClick={onCancel} disabled={pending}>
           <X className="h-4 w-4" />
-          Cancel
+          ยกเลิก
         </Button>
       </div>
     </div>

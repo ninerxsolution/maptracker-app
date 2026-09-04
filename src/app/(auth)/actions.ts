@@ -46,7 +46,7 @@ export async function registerAction(
 
   const existing = await db.user.findUnique({ where: { email } });
   if (existing) {
-    return { fieldErrors: { email: ["That email is already registered."] } };
+    return { fieldErrors: { email: ["อีเมลนี้ถูกใช้ลงทะเบียนแล้ว"] } };
   }
 
   const passwordHash = await hashPassword(password);
@@ -82,10 +82,10 @@ export async function loginAction(
   const user = await db.user.findUnique({ where: { email } });
 
   // Generic message — don't reveal which part was wrong.
-  const invalid: AuthState = { error: "Invalid email or password." };
+  const invalid: AuthState = { error: "อีเมลหรือรหัสผ่านไม่ถูกต้อง" };
   if (!user) return invalid;
   if (user.status === "SUSPENDED") {
-    return { error: "This account has been suspended. Contact an administrator." };
+    return { error: "บัญชีนี้ถูกระงับการใช้งาน กรุณาติดต่อผู้ดูแลระบบ" };
   }
   const ok = await verifyPassword(password, user.passwordHash);
   if (!ok) return invalid;

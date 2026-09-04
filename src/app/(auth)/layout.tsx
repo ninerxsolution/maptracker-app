@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 export default function AuthLayout({
   children,
@@ -13,13 +14,16 @@ export default function AuthLayout({
 
       <header className="relative z-10 flex items-center justify-between px-6 py-5">
         <Logo />
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-fg"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to home
-        </Link>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-fg"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            กลับหน้าแรก
+          </Link>
+        </div>
       </header>
 
       <main className="relative z-10 flex flex-1 items-center justify-center px-4 py-10">

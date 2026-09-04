@@ -58,7 +58,7 @@ export function UsersTable({
       const res = await setUserRole(u.id, role);
       if (!res.ok) { toast.error(res.error); return; }
       setUsers((xs) => xs.map((x) => (x.id === u.id ? { ...x, role } : x)));
-      toast.success(`${u.name} is now ${role === "ADMIN" ? "an admin" : "a member"}.`);
+      toast.success(`${u.name} เป็น${role === "ADMIN" ? "ผู้ดูแลระบบ" : "สมาชิก"}แล้ว`);
     });
   }
 
@@ -69,7 +69,7 @@ export function UsersTable({
       if (!res.ok) { toast.error(res.error); return; }
       setUsers((xs) => xs.map((x) => (x.id === u.id ? { ...x, status } : x)));
       toast.success(
-        `${u.name} ${status === "SUSPENDED" ? "suspended" : "reactivated"}.`,
+        `${u.name} ${status === "SUSPENDED" ? "ถูกระงับ" : "เปิดใช้งานอีกครั้ง"}แล้ว`,
       );
     });
   }
@@ -80,7 +80,7 @@ export function UsersTable({
       if (!res.ok) { toast.error(res.error); return; }
       setUsers((xs) => xs.filter((x) => x.id !== u.id));
       setConfirmId(null);
-      toast.success(`${u.name} deleted.`);
+      toast.success(`ลบ ${u.name} แล้ว`);
     });
   }
 
@@ -91,7 +91,7 @@ export function UsersTable({
         <Input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Search by name or email…"
+          placeholder="ค้นหาด้วยชื่อหรืออีเมล…"
           className="pl-10"
         />
       </div>
@@ -100,13 +100,13 @@ export function UsersTable({
         <table className="w-full min-w-[720px] text-sm">
           <thead>
             <tr className="border-b border-border text-left text-xs uppercase tracking-wide text-faint">
-              <th className="px-4 py-3 font-medium">User</th>
-              <th className="px-4 py-3 font-medium">Role</th>
-              <th className="px-4 py-3 font-medium">Status</th>
-              <th className="px-4 py-3 font-medium">Zones</th>
-              <th className="px-4 py-3 font-medium">Saved</th>
-              <th className="px-4 py-3 font-medium">Joined</th>
-              <th className="px-4 py-3 text-right font-medium">Actions</th>
+              <th className="px-4 py-3 font-medium">ผู้ใช้</th>
+              <th className="px-4 py-3 font-medium">บทบาท</th>
+              <th className="px-4 py-3 font-medium">สถานะ</th>
+              <th className="px-4 py-3 font-medium">โซน</th>
+              <th className="px-4 py-3 font-medium">ที่บันทึก</th>
+              <th className="px-4 py-3 font-medium">เข้าร่วมเมื่อ</th>
+              <th className="px-4 py-3 text-right font-medium">การดำเนินการ</th>
             </tr>
           </thead>
           <tbody>
@@ -125,7 +125,7 @@ export function UsersTable({
                         <p className="truncate font-medium text-fg">
                           {u.name}
                           {isSelf && (
-                            <span className="ml-1.5 text-xs text-faint">(you)</span>
+                            <span className="ml-1.5 text-xs text-faint">(คุณ)</span>
                           )}
                         </p>
                         <p className="truncate text-xs text-faint">{u.email}</p>
@@ -150,14 +150,14 @@ export function UsersTable({
                   <td className="px-4 py-3">
                     {confirming ? (
                       <div className="flex items-center justify-end gap-1.5">
-                        <span className="text-xs text-danger">Delete?</span>
+                        <span className="text-xs text-danger">ลบ?</span>
                         <Button
                           size="sm"
                           variant="danger"
                           loading={pending}
                           onClick={() => remove(u)}
                         >
-                          Yes
+                          ใช่
                         </Button>
                         <Button
                           size="sm"
@@ -170,7 +170,7 @@ export function UsersTable({
                     ) : (
                       <div className="flex items-center justify-end gap-1">
                         <IconBtn
-                          title={u.role === "ADMIN" ? "Make member" : "Make admin"}
+                          title={u.role === "ADMIN" ? "ตั้งเป็นสมาชิก" : "ตั้งเป็นผู้ดูแล"}
                           disabled={pending || (isSelf && u.role === "ADMIN")}
                           onClick={() => toggleRole(u)}
                         >
@@ -181,7 +181,7 @@ export function UsersTable({
                           )}
                         </IconBtn>
                         <IconBtn
-                          title={u.status === "ACTIVE" ? "Suspend" : "Reactivate"}
+                          title={u.status === "ACTIVE" ? "ระงับ" : "เปิดใช้งานอีกครั้ง"}
                           disabled={pending || isSelf}
                           onClick={() => toggleStatus(u)}
                         >
@@ -192,7 +192,7 @@ export function UsersTable({
                           )}
                         </IconBtn>
                         <IconBtn
-                          title="Delete"
+                          title="ลบ"
                           danger
                           disabled={pending || isSelf}
                           onClick={() => setConfirmId(u.id)}
@@ -209,12 +209,12 @@ export function UsersTable({
         </table>
         {filtered.length === 0 && (
           <p className="px-4 py-10 text-center text-sm text-muted">
-            No users match “{q}”.
+            ไม่พบผู้ใช้ที่ตรงกับ “{q}”
           </p>
         )}
       </div>
       <p className="text-xs text-faint">
-        {filtered.length} of {users.length} users
+        ผู้ใช้ {filtered.length} จาก {users.length} คน
       </p>
     </div>
   );

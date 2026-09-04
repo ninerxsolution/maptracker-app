@@ -25,19 +25,19 @@ export default function Error({
           <AlertTriangle className="h-7 w-7" />
         </span>
         <h1 className="mt-4 font-display text-2xl font-bold text-fg">
-          Something went wrong
+          เกิดข้อผิดพลาดบางอย่าง
         </h1>
         <p className="mx-auto mt-2 max-w-sm text-muted">
-          An unexpected error occurred. You can try again, or head back home.
+          เกิดข้อผิดพลาดที่ไม่คาดคิด คุณสามารถลองอีกครั้ง หรือกลับไปหน้าแรกได้
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Button onClick={reset}>
             <RotateCcw className="h-4 w-4" />
-            Try again
+            ลองอีกครั้ง
           </Button>
           <ButtonLink href="/" variant="outline">
             <Home className="h-4 w-4" />
-            Home
+            หน้าแรก
           </ButtonLink>
         </div>
       </div>

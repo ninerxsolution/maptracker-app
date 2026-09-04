@@ -23,10 +23,10 @@ export const USGS_FEEDS = {
 export type TimeWindow = keyof typeof USGS_FEEDS;
 
 export const TIME_WINDOWS: { value: TimeWindow; label: string }[] = [
-  { value: "hour", label: "Past hour" },
-  { value: "day", label: "Past 24 hours" },
-  { value: "week", label: "Past 7 days" },
-  { value: "month", label: "Past 30 days" },
+  { value: "hour", label: "1 ชั่วโมงล่าสุด" },
+  { value: "day", label: "24 ชั่วโมงล่าสุด" },
+  { value: "week", label: "7 วันล่าสุด" },
+  { value: "month", label: "30 วันล่าสุด" },
 ];
 
 // Seismically active places used as watch-zone presets / seed data.

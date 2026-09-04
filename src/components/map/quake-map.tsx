@@ -13,6 +13,13 @@ import {
 import "leaflet/dist/leaflet.css";
 import type { Quake } from "@/lib/usgs";
 import { magnitudeColor, magnitudeRadius, formatMagnitude } from "@/lib/magnitude";
+import { useTheme } from "@/components/theme/theme-provider";
+
+const TILES = {
+  dark: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+  light:
+    "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+};
 
 export type MapZone = {
   id: string;
@@ -70,6 +77,9 @@ export default function QuakeMap({
   draft?: MapDraft;
   onMapClick?: (lat: number, lng: number) => void;
 }) {
+  const { theme } = useTheme();
+  const selectedStroke = theme === "dark" ? "#ffffff" : "#0f1424";
+
   // Cap markers for performance, keeping the largest-magnitude events.
   const shown = useMemo(() => {
     if (quakes.length <= MAX_MARKERS) return quakes;
@@ -87,11 +97,12 @@ export default function QuakeMap({
       scrollWheelZoom
       worldCopyJump
       preferCanvas
-      className="h-full w-full bg-[#0b0e14]"
-      style={{ background: "#0b0e14" }}
+      className="h-full w-full"
+      style={{ background: "var(--color-map-bg)" }}
     >
       <TileLayer
-        url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+        key={theme}
+        url={theme === "dark" ? TILES.dark : TILES.light}
         attribution='Tiles &copy; <a href="https://www.esri.com/">Esri</a> — Esri, DeLorme, NAVTEQ'
         maxZoom={16}
       />
@@ -120,7 +131,7 @@ export default function QuakeMap({
             center={[q.lat, q.lng]}
             radius={magnitudeRadius(q.mag)}
             pathOptions={{
-              color: isSelected ? "#ffffff" : color,
+              color: isSelected ? selectedStroke : color,
               fillColor: color,
               fillOpacity: isSelected ? 0.9 : 0.55,
               weight: isSelected ? 2.5 : 1,

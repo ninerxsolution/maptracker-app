@@ -33,7 +33,7 @@ export function QuakeListItem({
       <MagBadge mag={quake.mag} size="sm" />
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium text-fg">
-          {quake.place ?? quake.title ?? "Unknown location"}
+          {quake.place ?? quake.title ?? "ไม่ทราบตำแหน่ง"}
         </p>
         <p className="mt-0.5 flex items-center gap-2 text-xs text-faint">
           <RelativeTime value={quake.time} />
@@ -42,7 +42,7 @@ export function QuakeListItem({
           {quake.tsunami ? (
             <span className="inline-flex items-center gap-0.5 text-primary">
               <Waves className="h-3 w-3" />
-              tsunami
+              สึนามิ
             </span>
           ) : null}
         </p>

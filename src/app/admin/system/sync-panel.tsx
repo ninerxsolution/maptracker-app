@@ -19,7 +19,7 @@ export function SyncButton() {
         return;
       }
       toast.success(
-        `Sync complete — ${res.newEvents} new event${res.newEvents === 1 ? "" : "s"}, ${res.newAlerts} new alert${res.newAlerts === 1 ? "" : "s"}.`,
+        `ซิงก์เสร็จสิ้น — ${res.newEvents} เหตุการณ์ใหม่, ${res.newAlerts} การแจ้งเตือนใหม่`,
       );
       router.refresh();
     });
@@ -28,7 +28,7 @@ export function SyncButton() {
   return (
     <Button onClick={run} loading={pending}>
       {!pending && <RefreshCw className="h-4 w-4" />}
-      Sync now
+      ซิงก์ตอนนี้
     </Button>
   );
 }

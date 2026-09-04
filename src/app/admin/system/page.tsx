@@ -17,7 +17,7 @@ import { MagBadge } from "@/components/quakes/mag-badge";
 import { PageHeader } from "@/components/app/page-header";
 import { SyncButton } from "./sync-panel";
 
-export const metadata = { title: "System" };
+export const metadata = { title: "ระบบ" };
 
 export default async function AdminSystemPage() {
   await requireAdmin();
@@ -56,8 +56,8 @@ export default async function AdminSystemPage() {
   return (
     <Container className="space-y-6 py-6">
       <PageHeader
-        title="System & data"
-        description="USGS ingestion status and recent alert activity."
+        title="ระบบและข้อมูล"
+        description="สถานะการนำเข้าข้อมูล USGS และกิจกรรมการแจ้งเตือนล่าสุด"
         actions={<SyncButton />}
       />
 
@@ -66,33 +66,33 @@ export default async function AdminSystemPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Database className="h-4 w-4 text-primary" />
-              Data pipeline
+              ไปป์ไลน์ข้อมูล
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <Row
               icon={Radio}
-              label="Source"
+              label="แหล่งข้อมูล"
               value="USGS Earthquake Hazards Program"
             />
             <Row
               icon={Activity}
-              label="Feeds"
+              label="ฟีด"
               value="all_hour / all_day / all_week / all_month"
             />
             <Row
               icon={Database}
-              label="Stored events"
+              label="เหตุการณ์ที่จัดเก็บ"
               value={eventCount.toLocaleString()}
             />
             <Row
               icon={Activity}
-              label="Events (last 7 days)"
+              label="เหตุการณ์ (7 วันล่าสุด)"
               value={weekEvents.toLocaleString()}
             />
             <Row
               icon={Clock}
-              label="Last sync"
+              label="ซิงก์ล่าสุด"
               value={lastSynced ? relativeTime(lastSynced.syncedAt) : "—"}
             />
           </CardContent>
@@ -100,7 +100,7 @@ export default async function AdminSystemPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Feed health</CardTitle>
+            <CardTitle>สถานะฟีด</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center gap-3 py-4 text-center">
@@ -110,10 +110,10 @@ export default async function AdminSystemPage() {
                     <CheckCircle2 className="h-7 w-7" />
                   </span>
                   <div>
-                    <Badge variant="success">Operational</Badge>
+                    <Badge variant="success">ทำงานปกติ</Badge>
                     <p className="mt-2 text-xs text-faint">
-                      USGS feed generated{" "}
-                      {feedGenerated ? relativeTime(feedGenerated) : "recently"}
+                      ฟีด USGS สร้างเมื่อ{" "}
+                      {feedGenerated ? relativeTime(feedGenerated) : "เร็วๆ นี้"}
                     </p>
                   </div>
                 </>
@@ -122,7 +122,7 @@ export default async function AdminSystemPage() {
                   <span className="grid h-14 w-14 place-items-center rounded-full bg-danger/12 text-danger">
                     <AlertTriangle className="h-7 w-7" />
                   </span>
-                  <Badge variant="danger">Unreachable</Badge>
+                  <Badge variant="danger">เชื่อมต่อไม่ได้</Badge>
                 </>
               )}
             </div>
@@ -132,9 +132,9 @@ export default async function AdminSystemPage() {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Recent alert activity</CardTitle>
+          <CardTitle>กิจกรรมการแจ้งเตือนล่าสุด</CardTitle>
           <span className="text-xs text-faint">
-            {alertCount.toLocaleString()} total
+            ทั้งหมด {alertCount.toLocaleString()}
           </span>
         </CardHeader>
         <div className="px-2 pb-2">
@@ -144,7 +144,7 @@ export default async function AdminSystemPage() {
                 <MagBadge mag={a.magnitude} size="sm" />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium text-fg">
-                    {a.event.place ?? "Unknown location"}
+                    {a.event.place ?? "ไม่ทราบตำแหน่ง"}
                   </p>
                   <p className="flex items-center gap-1.5 truncate text-xs text-faint">
                     <span

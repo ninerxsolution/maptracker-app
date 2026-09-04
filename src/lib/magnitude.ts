@@ -28,12 +28,12 @@ export const MAG_COLORS: Record<MagBucket, string> = {
 };
 
 export const MAG_LABELS: Record<MagBucket, string> = {
-  minor: "Minor",
-  light: "Light",
-  moderate: "Moderate",
-  strong: "Strong",
-  major: "Major",
-  great: "Great",
+  minor: "เล็กน้อย",
+  light: "เบา",
+  moderate: "ปานกลาง",
+  strong: "แรง",
+  major: "รุนแรง",
+  great: "มหาศาล",
 };
 
 export function magnitudeColor(mag: number | null | undefined): string {
@@ -60,10 +60,10 @@ export const MAGNITUDE_SCALE: {
   range: string;
   color: string;
 }[] = [
-  { bucket: "minor", label: "Minor", range: "< 2.5", color: MAG_COLORS.minor },
-  { bucket: "light", label: "Light", range: "2.5 – 4.4", color: MAG_COLORS.light },
-  { bucket: "moderate", label: "Moderate", range: "4.5 – 5.9", color: MAG_COLORS.moderate },
-  { bucket: "strong", label: "Strong", range: "6.0 – 6.9", color: MAG_COLORS.strong },
-  { bucket: "major", label: "Major", range: "7.0 – 7.9", color: MAG_COLORS.major },
-  { bucket: "great", label: "Great", range: "8.0 +", color: MAG_COLORS.great },
+  { bucket: "minor", label: "เล็กน้อย", range: "< 2.5", color: MAG_COLORS.minor },
+  { bucket: "light", label: "เบา", range: "2.5 – 4.4", color: MAG_COLORS.light },
+  { bucket: "moderate", label: "ปานกลาง", range: "4.5 – 5.9", color: MAG_COLORS.moderate },
+  { bucket: "strong", label: "แรง", range: "6.0 – 6.9", color: MAG_COLORS.strong },
+  { bucket: "major", label: "รุนแรง", range: "7.0 – 7.9", color: MAG_COLORS.major },
+  { bucket: "great", label: "มหาศาล", range: "8.0 +", color: MAG_COLORS.great },
 ];

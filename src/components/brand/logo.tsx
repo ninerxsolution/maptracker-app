@@ -28,7 +28,7 @@ export function Logo({
     <Link
       href={href}
       className={cn("group inline-flex items-center gap-2.5", className)}
-      aria-label="MapTracker home"
+      aria-label="หน้าแรก MapTracker"
     >
       <LogoMark />
       {showText && (

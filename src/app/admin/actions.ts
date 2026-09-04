@@ -17,9 +17,9 @@ export async function setUserRole(
 ): Promise<AdminResult> {
   const admin = await requireAdmin();
   if (!ROLES.includes(role as (typeof ROLES)[number]))
-    return { ok: false, error: "Invalid role." };
+    return { ok: false, error: "บทบาทไม่ถูกต้อง" };
   if (userId === admin.id && role !== "ADMIN")
-    return { ok: false, error: "You can't remove your own admin role." };
+    return { ok: false, error: "ไม่สามารถลบบทบาทผู้ดูแลระบบของตัวเองได้" };
 
   await db.user.update({ where: { id: userId }, data: { role } });
   revalidatePath("/admin/users");
@@ -33,9 +33,9 @@ export async function setUserStatus(
 ): Promise<AdminResult> {
   const admin = await requireAdmin();
   if (!USER_STATUSES.includes(status as (typeof USER_STATUSES)[number]))
-    return { ok: false, error: "Invalid status." };
+    return { ok: false, error: "สถานะไม่ถูกต้อง" };
   if (userId === admin.id && status === "SUSPENDED")
-    return { ok: false, error: "You can't suspend your own account." };
+    return { ok: false, error: "ไม่สามารถระงับบัญชีของตัวเองได้" };
 
   await db.user.update({ where: { id: userId }, data: { status } });
   revalidatePath("/admin/users");
@@ -46,7 +46,7 @@ export async function setUserStatus(
 export async function deleteUser(userId: string): Promise<AdminResult> {
   const admin = await requireAdmin();
   if (userId === admin.id)
-    return { ok: false, error: "You can't delete your own account." };
+    return { ok: false, error: "ไม่สามารถลบบัญชีของตัวเองได้" };
 
   await db.user.delete({ where: { id: userId } });
   revalidatePath("/admin/users");
@@ -89,7 +89,7 @@ export async function syncNow(): Promise<
     [...week.quakes, ...day.quakes].forEach((q) => byId.set(q.id, q));
     quakes = [...byId.values()];
   } catch {
-    return { ok: false, error: "Couldn't reach the USGS feed." };
+    return { ok: false, error: "ไม่สามารถเชื่อมต่อฟีด USGS ได้" };
   }
 
   // Insert events not already stored.

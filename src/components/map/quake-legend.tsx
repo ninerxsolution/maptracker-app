@@ -10,7 +10,7 @@ export function QuakeLegend({ className }: { className?: string }) {
       )}
     >
       <p className="mb-1.5 font-mono text-[10px] uppercase tracking-widest text-faint">
-        Magnitude
+        ขนาด
       </p>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
         {MAGNITUDE_SCALE.map((m) => (

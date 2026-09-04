@@ -20,40 +20,40 @@ import { Reveal } from "@/components/ui/reveal";
 const features = [
   {
     icon: Globe2,
-    title: "Live global map",
-    body: "Every earthquake USGS publishes, rendered on an interactive world map within a minute of detection.",
+    title: "แผนที่โลกแบบสด",
+    body: "ทุกแผ่นดินไหวที่ USGS เผยแพร่ แสดงผลบนแผนที่โลกแบบโต้ตอบภายในหนึ่งนาทีหลังตรวจพบ",
   },
   {
     icon: Radar,
-    title: "Watch zones",
-    body: "Draw circular regions over the places you care about and monitor only the seismic activity inside them.",
+    title: "โซนเฝ้าระวัง",
+    body: "วาดพื้นที่วงกลมครอบบริเวณที่คุณสนใจ แล้วติดตามเฉพาะกิจกรรมแผ่นดินไหวภายในนั้น",
   },
   {
     icon: BellRing,
-    title: "Magnitude alerts",
-    body: "Set a magnitude threshold per zone and instantly see which events would have alerted you.",
+    title: "การแจ้งเตือนตามขนาด",
+    body: "กำหนดเกณฑ์ขนาดสำหรับแต่ละโซน แล้วดูได้ทันทีว่าเหตุการณ์ใดจะแจ้งเตือนคุณ",
   },
   {
     icon: Bookmark,
-    title: "Bookmarks & notes",
-    body: "Save notable events with your own observations and revisit them any time — even after they leave the feed.",
+    title: "บุ๊กมาร์กและบันทึก",
+    body: "บันทึกเหตุการณ์สำคัญพร้อมข้อสังเกตของคุณ และกลับมาดูได้ทุกเมื่อ แม้หลังจากออกจากฟีดไปแล้ว",
   },
 ];
 
 const magnitudeScale = [
-  { label: "Minor", range: "< 2.5", color: "var(--color-mag-minor)" },
-  { label: "Light", range: "2.5 – 4.4", color: "var(--color-mag-light)" },
-  { label: "Moderate", range: "4.5 – 5.9", color: "var(--color-mag-moderate)" },
-  { label: "Strong", range: "6.0 – 6.9", color: "var(--color-mag-strong)" },
-  { label: "Major", range: "7.0 – 7.9", color: "var(--color-mag-major)" },
-  { label: "Great", range: "8.0 +", color: "var(--color-mag-great)" },
+  { label: "เล็กน้อย", range: "< 2.5", color: "var(--color-mag-minor)" },
+  { label: "เบา", range: "2.5 – 4.4", color: "var(--color-mag-light)" },
+  { label: "ปานกลาง", range: "4.5 – 5.9", color: "var(--color-mag-moderate)" },
+  { label: "แรง", range: "6.0 – 6.9", color: "var(--color-mag-strong)" },
+  { label: "รุนแรง", range: "7.0 – 7.9", color: "var(--color-mag-major)" },
+  { label: "มหาศาล", range: "8.0 +", color: "var(--color-mag-great)" },
 ];
 
 const highlights = [
-  { icon: Zap, label: "Sub-minute latency" },
-  { icon: Globe2, label: "Worldwide coverage" },
-  { icon: Database, label: "Official USGS source" },
-  { icon: ShieldCheck, label: "No API keys required" },
+  { icon: Zap, label: "หน่วงต่ำกว่าหนึ่งนาที" },
+  { icon: Globe2, label: "ครอบคลุมทั่วโลก" },
+  { icon: Database, label: "แหล่งข้อมูลทางการจาก USGS" },
+  { icon: ShieldCheck, label: "ไม่ต้องใช้คีย์ API" },
 ];
 
 export default async function HomePage() {
@@ -85,26 +85,26 @@ export default async function HomePage() {
               <Badge variant="primary" className="mb-5">
                 <span className="live-dot" />
                 {liveCount > 0
-                  ? `${liveCount.toLocaleString()} earthquakes in the last 24h`
-                  : "Powered by live USGS data"}
+                  ? `${liveCount.toLocaleString()} แผ่นดินไหวใน 24 ชม.ที่ผ่านมา`
+                  : "ขับเคลื่อนด้วยข้อมูล USGS แบบสด"}
               </Badge>
               <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-fg sm:text-5xl lg:text-6xl">
-                Track earthquakes
+                ติดตามแผ่นดินไหว
                 <br />
-                <span className="text-gradient">as the planet moves.</span>
+                <span className="text-gradient">ขณะที่โลกเคลื่อนตัว</span>
               </h1>
               <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted">
-                MapTracker turns the U.S. Geological Survey&apos;s real-time
-                seismic feed into a living map. Watch the regions you care
-                about, bookmark events, and never miss significant activity.
+                MapTracker เปลี่ยนฟีดแผ่นดินไหวแบบเรียลไทม์ของ U.S. Geological
+                Survey ให้กลายเป็นแผนที่ที่มีชีวิต เฝ้าระวังภูมิภาคที่คุณสนใจ
+                บุ๊กมาร์กเหตุการณ์ และไม่พลาดกิจกรรมที่มีนัยสำคัญ
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <ButtonLink href="/explore" size="lg">
-                  Explore the map
+                  สำรวจแผนที่
                   <ArrowRight className="h-4 w-4" />
                 </ButtonLink>
                 <ButtonLink href="/register" size="lg" variant="outline">
-                  Create free account
+                  สร้างบัญชีฟรี
                 </ButtonLink>
               </div>
 
@@ -132,11 +132,11 @@ export default async function HomePage() {
           <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
             <Reveal className="mx-auto max-w-2xl text-center">
               <h2 className="font-display text-3xl font-bold tracking-tight text-fg sm:text-4xl">
-                Everything you need to stay ahead of the ground
+                ทุกสิ่งที่คุณต้องมีเพื่อก้าวนำแผ่นดิน
               </h2>
               <p className="mt-4 text-muted">
-                From a global overview to the streets you live on — MapTracker
-                scales with how closely you want to watch.
+                ตั้งแต่ภาพรวมทั่วโลกไปจนถึงถนนที่คุณอาศัยอยู่ — MapTracker
+                ปรับขนาดตามระดับความใกล้ชิดที่คุณต้องการเฝ้าดู
               </p>
             </Reveal>
 
@@ -168,34 +168,34 @@ export default async function HomePage() {
                 <Reveal>
                   <Badge variant="outline" className="mb-4">
                     <Database className="h-3.5 w-3.5" />
-                    The data
+                    ข้อมูล
                   </Badge>
                   <h2 className="font-display text-2xl font-bold tracking-tight text-fg sm:text-3xl">
-                    Straight from the source
+                    ตรงจากแหล่งข้อมูล
                   </h2>
                   <p className="mt-4 leading-relaxed text-muted">
-                    MapTracker reads directly from the{" "}
+                    MapTracker อ่านข้อมูลโดยตรงจาก{" "}
                     <a
                       href="https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-primary underline-offset-4 hover:underline"
                     >
-                      USGS GeoJSON feeds
-                    </a>
-                    , regenerated every minute. No third-party middlemen, no
-                    stale caches — the same authoritative data seismologists use.
+                      ฟีด USGS GeoJSON
+                    </a>{" "}
+                    ที่สร้างใหม่ทุกนาที ไม่มีตัวกลางบุคคลที่สาม ไม่มีแคชที่ล้าสมัย
+                    — เป็นข้อมูลที่เชื่อถือได้ชุดเดียวกับที่นักแผ่นดินไหววิทยาใช้
                   </p>
                   <p className="mt-4 leading-relaxed text-muted">
-                    Events are colour-coded by magnitude so severity reads at a
-                    glance, from barely-perceptible tremors to great quakes.
+                    เหตุการณ์ถูกกำหนดสีตามขนาด เพื่อให้อ่านระดับความรุนแรงได้ในพริบตา
+                    ตั้งแต่แรงสั่นสะเทือนที่แทบรับรู้ไม่ได้ไปจนถึงแผ่นดินไหวขนาดมหึมา
                   </p>
                 </Reveal>
 
                 <Reveal delay={0.1}>
                   <div className="rounded-xl border border-border bg-bg/50 p-6">
                     <p className="mb-4 font-mono text-xs uppercase tracking-widest text-faint">
-                      Magnitude scale
+                      มาตราขนาด
                     </p>
                     <ul className="space-y-3">
                       {magnitudeScale.map((m) => (
@@ -230,19 +230,19 @@ export default async function HomePage() {
               <div className="grid-bg absolute inset-0 opacity-40" aria-hidden />
               <div className="relative">
                 <h2 className="mx-auto max-w-2xl font-display text-3xl font-bold tracking-tight text-fg sm:text-4xl">
-                  Start watching your world
+                  เริ่มเฝ้าดูโลกของคุณ
                 </h2>
                 <p className="mx-auto mt-4 max-w-xl text-muted">
-                  Create a free account to set up watch zones, save events, and
-                  build your personal seismic dashboard.
+                  สร้างบัญชีฟรีเพื่อตั้งค่าโซนเฝ้าระวัง บันทึกเหตุการณ์
+                  และสร้างแดชบอร์ดแผ่นดินไหวส่วนตัวของคุณ
                 </p>
                 <div className="mt-8 flex flex-wrap justify-center gap-3">
                   <ButtonLink href="/register" size="lg">
-                    Get started — it&apos;s free
+                    เริ่มใช้งาน — ฟรี
                     <ArrowRight className="h-4 w-4" />
                   </ButtonLink>
                   <ButtonLink href="/explore" size="lg" variant="outline">
-                    Just show me the map
+                    แค่ดูแผนที่ก็พอ
                   </ButtonLink>
                 </div>
               </div>

@@ -51,7 +51,7 @@ export async function createZone(
 ): Promise<ActionResult<{ zone: ZoneRow }>> {
   const user = await requireUser();
   const parsed = zoneSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: "Please check the zone details." };
+  if (!parsed.success) return { ok: false, error: "กรุณาตรวจสอบรายละเอียดโซน" };
 
   const zone = await db.watchZone.create({
     data: { ...parsed.data, userId: user.id },
@@ -67,13 +67,13 @@ export async function updateZone(
 ): Promise<ActionResult<{ zone: ZoneRow }>> {
   const user = await requireUser();
   const parsed = zoneSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: "Please check the zone details." };
+  if (!parsed.success) return { ok: false, error: "กรุณาตรวจสอบรายละเอียดโซน" };
 
   const owned = await db.watchZone.findFirst({
     where: { id, userId: user.id },
     select: { id: true },
   });
-  if (!owned) return { ok: false, error: "Zone not found." };
+  if (!owned) return { ok: false, error: "ไม่พบโซน" };
 
   const zone = await db.watchZone.update({ where: { id }, data: parsed.data });
   revalidatePath("/app/zones");
@@ -84,7 +84,7 @@ export async function updateZone(
 export async function deleteZone(id: string): Promise<ActionResult> {
   const user = await requireUser();
   const res = await db.watchZone.deleteMany({ where: { id, userId: user.id } });
-  if (res.count === 0) return { ok: false, error: "Zone not found." };
+  if (res.count === 0) return { ok: false, error: "ไม่พบโซน" };
   revalidatePath("/app/zones");
   revalidatePath("/app");
   return { ok: true };
@@ -96,7 +96,7 @@ export async function toggleBookmark(
 ): Promise<ActionResult<{ saved: boolean }>> {
   const user = await requireUser();
   const parsed = bookmarkSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: "Invalid event." };
+  if (!parsed.success) return { ok: false, error: "เหตุการณ์ไม่ถูกต้อง" };
   const data = parsed.data;
 
   const existing = await db.bookmark.findUnique({
@@ -133,13 +133,13 @@ export async function updateBookmarkNote(
 ): Promise<ActionResult> {
   const user = await requireUser();
   const parsed = noteSchema.safeParse(note);
-  if (!parsed.success) return { ok: false, error: "Note is too long." };
+  if (!parsed.success) return { ok: false, error: "โน้ตยาวเกินไป" };
 
   const res = await db.bookmark.updateMany({
     where: { id, userId: user.id },
     data: { note: parsed.data.trim() || null },
   });
-  if (res.count === 0) return { ok: false, error: "Bookmark not found." };
+  if (res.count === 0) return { ok: false, error: "ไม่พบบุ๊กมาร์ก" };
   revalidatePath("/app/bookmarks");
   return { ok: true };
 }
@@ -147,7 +147,7 @@ export async function updateBookmarkNote(
 export async function deleteBookmark(id: string): Promise<ActionResult> {
   const user = await requireUser();
   const res = await db.bookmark.deleteMany({ where: { id, userId: user.id } });
-  if (res.count === 0) return { ok: false, error: "Bookmark not found." };
+  if (res.count === 0) return { ok: false, error: "ไม่พบบุ๊กมาร์ก" };
   revalidatePath("/app/bookmarks");
   revalidatePath("/app");
   return { ok: true };
@@ -163,7 +163,7 @@ export async function markAlertRead(
     where: { id, userId: user.id },
     data: { readAt: read ? new Date() : null },
   });
-  if (res.count === 0) return { ok: false, error: "Alert not found." };
+  if (res.count === 0) return { ok: false, error: "ไม่พบการแจ้งเตือน" };
   revalidatePath("/app/alerts");
   revalidatePath("/app");
   return { ok: true };

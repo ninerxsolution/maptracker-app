@@ -36,7 +36,7 @@ export function MonitorPreview({ events }: { events?: PreviewEvent[] }) {
       <div className="flex items-center justify-between border-b border-border/70 px-4 py-2.5">
         <div className="flex items-center gap-2">
           <span className="live-dot" />
-          <span className="font-mono text-xs text-muted">LIVE FEED · USGS</span>
+          <span className="font-mono text-xs text-muted">ฟีดสด · USGS</span>
         </div>
         <div className="flex gap-1.5">
           <span className="h-2 w-2 rounded-full bg-surface-3" />
@@ -107,7 +107,7 @@ export function MonitorPreview({ events }: { events?: PreviewEvent[] }) {
                 M{formatMagnitude(latest.mag)}
               </span>
               <span className="truncate text-xs text-muted">
-                {latest.place ?? "Unknown location"}
+                {latest.place ?? "ไม่ทราบตำแหน่ง"}
               </span>
               <span className="ml-auto shrink-0 text-xs text-faint">
                 <RelativeTime value={latest.time} />
