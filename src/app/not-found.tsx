@@ -10,19 +10,19 @@ export default function NotFound() {
         <Logo href="/" className="mx-auto mb-8" />
         <p className="font-display text-7xl font-bold text-gradient">404</p>
         <h1 className="mt-4 font-display text-2xl font-bold text-fg">
-          Off the map
+          หลุดออกนอกแผนที่
         </h1>
         <p className="mx-auto mt-2 max-w-sm text-muted">
-          We couldn&apos;t find that page. It may have moved, or never existed.
+          เราไม่พบหน้านี้ อาจถูกย้ายไปแล้ว หรือไม่เคยมีอยู่จริง
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <ButtonLink href="/">
             <Home className="h-4 w-4" />
-            Home
+            หน้าแรก
           </ButtonLink>
           <ButtonLink href="/explore" variant="outline">
             <Compass className="h-4 w-4" />
-            Explore the map
+            สำรวจแผนที่
           </ButtonLink>
         </div>
       </div>

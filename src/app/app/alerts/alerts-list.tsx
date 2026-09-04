@@ -45,7 +45,7 @@ export function AlertsList({ initial }: { initial: AlertRow[] }) {
         setAlerts(prev);
         toast.error(res.error);
       } else {
-        toast.success("All alerts marked read.");
+        toast.success("ทำเครื่องหมายอ่านทั้งหมดแล้ว");
       }
     });
   }
@@ -56,10 +56,10 @@ export function AlertsList({ initial }: { initial: AlertRow[] }) {
         <p className="text-sm text-muted">
           {unread > 0 ? (
             <>
-              <span className="font-semibold text-fg">{unread}</span> unread
+              <span className="font-semibold text-fg">{unread}</span> ยังไม่อ่าน
             </>
           ) : (
-            "All caught up"
+            "อ่านครบทั้งหมดแล้ว"
           )}
         </p>
         <Button
@@ -69,7 +69,7 @@ export function AlertsList({ initial }: { initial: AlertRow[] }) {
           disabled={unread === 0 || pending}
         >
           <CheckCheck className="h-4 w-4" />
-          Mark all read
+          ทำเครื่องหมายอ่านทั้งหมด
         </Button>
       </div>
 
@@ -86,7 +86,7 @@ export function AlertsList({ initial }: { initial: AlertRow[] }) {
             <MagBadge mag={a.magnitude} size="sm" />
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium text-fg">
-                {a.place ?? "Unknown location"}
+                {a.place ?? "ไม่ทราบตำแหน่ง"}
               </p>
               <p className="flex items-center gap-1.5 text-xs text-faint">
                 <span
@@ -106,8 +106,8 @@ export function AlertsList({ initial }: { initial: AlertRow[] }) {
                   ? "text-faint hover:bg-surface-2 hover:text-fg"
                   : "text-primary hover:bg-primary/10",
               )}
-              aria-label={a.read ? "Mark unread" : "Mark read"}
-              title={a.read ? "Mark unread" : "Mark read"}
+              aria-label={a.read ? "ทำเครื่องหมายยังไม่อ่าน" : "ทำเครื่องหมายอ่านแล้ว"}
+              title={a.read ? "ทำเครื่องหมายยังไม่อ่าน" : "ทำเครื่องหมายอ่านแล้ว"}
             >
               {a.read ? (
                 <Circle className="h-4 w-4" />

@@ -68,7 +68,7 @@ export function SignupsAreaChart({
             width={32}
           />
           <Tooltip
-            content={<TooltipBox suffix="new" />}
+            content={<TooltipBox suffix="ใหม่" />}
             cursor={{ stroke: "var(--color-border-strong)" }}
           />
           <Area
@@ -107,7 +107,7 @@ export function MagnitudeBarChart({
             width={32}
           />
           <Tooltip
-            content={<TooltipBox suffix="events" />}
+            content={<TooltipBox suffix="เหตุการณ์" />}
             cursor={{ fill: "rgba(255,255,255,0.03)" }}
           />
           <Bar dataKey="count" radius={[6, 6, 0, 0]}>

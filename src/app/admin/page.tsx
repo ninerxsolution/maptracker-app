@@ -20,7 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/app/page-header";
 import { SignupsAreaChart, MagnitudeBarChart } from "@/components/admin/charts";
 
-export const metadata = { title: "Admin overview" };
+export const metadata = { title: "ภาพรวมผู้ดูแลระบบ" };
 
 const MAG_ORDER: MagBucket[] = [
   "minor",
@@ -113,25 +113,25 @@ export default async function AdminOverview() {
   return (
     <Container className="space-y-6 py-6">
       <PageHeader
-        title="Platform overview"
-        description="Usage and health across MapTracker."
+        title="ภาพรวมแพลตฟอร์ม"
+        description="การใช้งานและสถานะทั่วทั้ง MapTracker"
       />
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatTile label="Total users" value={userCount} icon={Users} />
-        <StatTile label="Active" value={activeCount} icon={UserCheck} accent="success" />
-        <StatTile label="Suspended" value={suspendedCount} icon={UserX} accent="danger" />
-        <StatTile label="Admins" value={adminCount} icon={ShieldCheck} accent="primary" />
-        <StatTile label="Watch zones" value={zoneCount} icon={Radar} accent="primary" />
-        <StatTile label="Bookmarks" value={bookmarkCount} icon={Bookmark} accent="success" />
-        <StatTile label="Synced events" value={eventCount} icon={Globe2} accent="warning" />
-        <StatTile label="Alerts fired" value={alertCount} icon={BellRing} accent="danger" />
+        <StatTile label="ผู้ใช้ทั้งหมด" value={userCount} icon={Users} />
+        <StatTile label="ใช้งาน" value={activeCount} icon={UserCheck} accent="success" />
+        <StatTile label="ถูกระงับ" value={suspendedCount} icon={UserX} accent="danger" />
+        <StatTile label="ผู้ดูแลระบบ" value={adminCount} icon={ShieldCheck} accent="primary" />
+        <StatTile label="โซนเฝ้าระวัง" value={zoneCount} icon={Radar} accent="primary" />
+        <StatTile label="บุ๊กมาร์ก" value={bookmarkCount} icon={Bookmark} accent="success" />
+        <StatTile label="เหตุการณ์ที่ซิงก์" value={eventCount} icon={Globe2} accent="warning" />
+        <StatTile label="การแจ้งเตือนที่เกิดขึ้น" value={alertCount} icon={BellRing} accent="danger" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>New signups · last 30 days</CardTitle>
+            <CardTitle>สมาชิกใหม่ · 30 วันล่าสุด</CardTitle>
           </CardHeader>
           <CardContent>
             <SignupsAreaChart data={signups} />
@@ -140,7 +140,7 @@ export default async function AdminOverview() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Synced events by magnitude</CardTitle>
+            <CardTitle>เหตุการณ์ที่ซิงก์ตามขนาด</CardTitle>
           </CardHeader>
           <CardContent>
             <MagnitudeBarChart data={magData} />
@@ -151,9 +151,9 @@ export default async function AdminOverview() {
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Newest members</CardTitle>
+            <CardTitle>สมาชิกใหม่ล่าสุด</CardTitle>
             <span className="text-xs text-faint">
-              Last sync {lastEvent ? relativeTime(lastEvent.syncedAt) : "—"}
+              ซิงก์ล่าสุด {lastEvent ? relativeTime(lastEvent.syncedAt) : "—"}
             </span>
           </CardHeader>
           <div className="px-2 pb-2">
@@ -165,7 +165,7 @@ export default async function AdminOverview() {
                     <p className="truncate text-sm font-medium text-fg">{u.name}</p>
                     <p className="truncate text-xs text-faint">{u.email}</p>
                   </div>
-                  {u.role === "ADMIN" && <Badge variant="primary">Admin</Badge>}
+                  {u.role === "ADMIN" && <Badge variant="primary">ผู้ดูแลระบบ</Badge>}
                   <span className="text-xs text-faint">
                     {relativeTime(u.createdAt)}
                   </span>
@@ -177,14 +177,14 @@ export default async function AdminOverview() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Composition</CardTitle>
+            <CardTitle>องค์ประกอบ</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Ratio label="Active" value={activeCount} total={userCount} color="var(--color-success)" />
-            <Ratio label="Suspended" value={suspendedCount} total={userCount} color="var(--color-danger)" />
-            <Ratio label="Admins" value={adminCount} total={userCount} color="var(--color-primary)" />
+            <Ratio label="ใช้งาน" value={activeCount} total={userCount} color="var(--color-success)" />
+            <Ratio label="ถูกระงับ" value={suspendedCount} total={userCount} color="var(--color-danger)" />
+            <Ratio label="ผู้ดูแลระบบ" value={adminCount} total={userCount} color="var(--color-primary)" />
             <Ratio
-              label="Users with zones"
+              label="ผู้ใช้ที่มีโซนเฝ้าระวัง"
               value={zoneCount > 0 ? Math.min(userCount, zoneCount) : 0}
               total={userCount}
               color="var(--color-warning)"

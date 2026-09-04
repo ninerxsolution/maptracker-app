@@ -36,7 +36,7 @@ export function LoginForm({ next }: { next?: string }) {
       )}
 
       <TextField
-        label="Email"
+        label="อีเมล"
         name="email"
         type="email"
         autoComplete="email"
@@ -49,7 +49,7 @@ export function LoginForm({ next }: { next?: string }) {
       />
 
       <TextField
-        label="Password"
+        label="รหัสผ่าน"
         name="password"
         type={showPw ? "text" : "password"}
         autoComplete="current-password"
@@ -64,7 +64,7 @@ export function LoginForm({ next }: { next?: string }) {
             type="button"
             onClick={() => setShowPw((v) => !v)}
             className="grid h-7 w-7 place-items-center rounded-lg text-faint transition-colors hover:text-fg"
-            aria-label={showPw ? "Hide password" : "Show password"}
+            aria-label={showPw ? "ซ่อนรหัสผ่าน" : "แสดงรหัสผ่าน"}
           >
             {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
@@ -73,12 +73,12 @@ export function LoginForm({ next }: { next?: string }) {
 
       <Button type="submit" className="w-full" loading={pending}>
         {!pending && <LogIn className="h-4 w-4" />}
-        Sign in
+        เข้าสู่ระบบ
       </Button>
 
       <div className="rounded-xl border border-border bg-surface-2/60 p-3">
         <p className="mb-2 text-xs font-medium text-faint">
-          Demo accounts — one click to fill
+          บัญชีทดลอง — คลิกเดียวเพื่อกรอกอัตโนมัติ
         </p>
         <div className="flex gap-2">
           <Button
@@ -88,7 +88,7 @@ export function LoginForm({ next }: { next?: string }) {
             className="flex-1"
             onClick={() => fillDemo("admin")}
           >
-            Admin
+            ผู้ดูแลระบบ
           </Button>
           <Button
             type="button"
@@ -97,7 +97,7 @@ export function LoginForm({ next }: { next?: string }) {
             className="flex-1"
             onClick={() => fillDemo("user")}
           >
-            Member
+            สมาชิก
           </Button>
         </div>
       </div>

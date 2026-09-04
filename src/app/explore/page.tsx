@@ -11,9 +11,9 @@ import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { ExploreClient } from "./explore-client";
 
 export const metadata: Metadata = {
-  title: "Explore live earthquakes",
+  title: "สำรวจแผ่นดินไหวสด",
   description:
-    "An interactive world map of recent earthquakes, updated every minute from the USGS Earthquake Hazards Program.",
+    "แผนที่โลกแบบโต้ตอบแสดงแผ่นดินไหวล่าสุด อัปเดตทุกนาทีจาก USGS Earthquake Hazards Program",
 };
 
 export default async function ExplorePage() {
@@ -51,7 +51,7 @@ export default async function ExplorePage() {
             className="hidden items-center gap-1.5 text-sm text-muted transition-colors hover:text-fg sm:inline-flex"
           >
             <ArrowLeft className="h-4 w-4" />
-            Home
+            หน้าแรก
           </Link>
         </div>
         <div className="flex items-center gap-2">
@@ -63,17 +63,17 @@ export default async function ExplorePage() {
                 size="sm"
                 variant="secondary"
               >
-                Dashboard
+                แดชบอร์ด
               </ButtonLink>
               <Avatar name={user.name} />
             </>
           ) : (
             <>
               <ButtonLink href="/login" variant="ghost" size="sm">
-                Sign in
+                เข้าสู่ระบบ
               </ButtonLink>
               <ButtonLink href="/register" size="sm">
-                Get started
+                เริ่มใช้งาน
               </ButtonLink>
             </>
           )}

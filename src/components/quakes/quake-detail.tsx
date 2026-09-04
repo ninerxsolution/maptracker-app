@@ -59,7 +59,7 @@ export function QuakeDetail({
           <MagBadge mag={quake.mag} size="lg" />
           <div>
             <p className="text-xs font-medium uppercase tracking-wide text-faint">
-              {magnitudeLabel(quake.mag)} earthquake
+              แผ่นดินไหวระดับ {magnitudeLabel(quake.mag)}
             </p>
             <p className="mt-0.5 text-sm font-semibold text-fg">
               <RelativeTime value={quake.time} />
@@ -69,7 +69,7 @@ export function QuakeDetail({
         {onClose && (
           <button
             onClick={onClose}
-            aria-label="Close details"
+            aria-label="ปิดรายละเอียด"
             className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-faint transition-colors hover:bg-surface-2 hover:text-fg"
           >
             <X className="h-4 w-4" />
@@ -78,37 +78,37 @@ export function QuakeDetail({
       </div>
 
       <h3 className="mt-4 text-lg font-semibold leading-snug text-fg">
-        {quake.place ?? quake.title ?? "Unknown location"}
+        {quake.place ?? quake.title ?? "ไม่ทราบตำแหน่ง"}
       </h3>
 
       <div className="mt-3 divide-y divide-border/60">
-        <Row icon={Clock} label="Occurred" value={dateTime(quake.time)} />
+        <Row icon={Clock} label="เกิดเมื่อ" value={dateTime(quake.time)} />
         <Row
           icon={ArrowDownToLine}
-          label="Depth"
+          label="ความลึก"
           value={quake.depth != null ? `${quake.depth.toFixed(1)} km` : "—"}
         />
         <Row
           icon={MapPin}
-          label="Coordinates"
+          label="พิกัด"
           value={`${quake.lat.toFixed(2)}, ${quake.lng.toFixed(2)}`}
         />
         <Row
           icon={Activity}
-          label="Type"
+          label="ประเภท"
           value={quake.magType?.toUpperCase() ?? "—"}
         />
         {quake.felt != null && (
           <Row
             icon={Users}
-            label="Felt reports"
+            label="รายงานการรู้สึก"
             value={quake.felt.toLocaleString()}
           />
         )}
         {quake.alert && (
           <Row
             icon={TriangleAlert}
-            label="PAGER alert"
+            label="การแจ้งเตือน PAGER"
             value={
               <span
                 className="capitalize"
@@ -122,8 +122,8 @@ export function QuakeDetail({
         {quake.tsunami ? (
           <Row
             icon={Waves}
-            label="Tsunami"
-            value={<span className="text-primary">Flagged</span>}
+            label="สึนามิ"
+            value={<span className="text-primary">ถูกทำเครื่องหมาย</span>}
           />
         ) : null}
       </div>
@@ -137,7 +137,7 @@ export function QuakeDetail({
             rel="noopener noreferrer"
             className="inline-flex h-10 items-center gap-2 rounded-xl border border-border-strong px-4 text-sm font-medium text-fg transition-colors hover:border-primary/60 hover:bg-surface-2"
           >
-            View on USGS
+            ดูบน USGS
             <ExternalLink className="h-4 w-4" />
           </a>
         )}

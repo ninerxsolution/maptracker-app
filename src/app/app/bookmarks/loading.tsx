@@ -3,8 +3,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function BookmarksLoading() {
   return (
-    <Container className="space-y-6 py-6" role="status" aria-label="Loading bookmarks">
-      <span className="sr-only">Loading…</span>
+    <Container className="space-y-6 py-6" role="status" aria-label="กำลังโหลดบุ๊กมาร์ก">
+      <span className="sr-only">กำลังโหลด…</span>
       <Skeleton className="h-8 w-40" />
       <div className="grid gap-4 sm:grid-cols-2">
         {Array.from({ length: 4 }).map((_, i) => (

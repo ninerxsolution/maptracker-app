@@ -8,7 +8,7 @@ import {
   type BookmarkMod,
 } from "./content-moderation";
 
-export const metadata = { title: "Content" };
+export const metadata = { title: "เนื้อหา" };
 
 export default async function AdminContentPage() {
   await requireAdmin();
@@ -50,8 +50,8 @@ export default async function AdminContentPage() {
   return (
     <Container className="space-y-6 py-6">
       <PageHeader
-        title="Content moderation"
-        description="Review and remove watch zones and bookmarks across all accounts."
+        title="การกลั่นกรองเนื้อหา"
+        description="ตรวจสอบและลบโซนเฝ้าระวังและบุ๊กมาร์กจากทุกบัญชี"
       />
       <ContentModeration zones={zoneRows} bookmarks={bookmarkRows} />
     </Container>

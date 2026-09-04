@@ -4,7 +4,7 @@ import { fetchQuakes, type Quake } from "@/lib/usgs";
 import { ZonesManager } from "./zones-manager";
 import type { ZoneRow } from "../actions";
 
-export const metadata = { title: "Watch zones" };
+export const metadata = { title: "โซนเฝ้าระวัง" };
 
 export default async function ZonesPage() {
   const user = await requireUser();

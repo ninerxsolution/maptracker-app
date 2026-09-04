@@ -7,9 +7,9 @@ import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { getCurrentUser } from "@/lib/auth/current-user";
 
 const navLinks = [
-  { href: "/explore", label: "Explore" },
-  { href: "/#features", label: "Features" },
-  { href: "/#data", label: "Data" },
+  { href: "/explore", label: "สำรวจ" },
+  { href: "/#features", label: "ฟีเจอร์" },
+  { href: "/#data", label: "ข้อมูล" },
 ];
 
 export async function SiteHeader() {
@@ -39,12 +39,12 @@ export async function SiteHeader() {
             <>
               <ButtonLink href={dashboardHref} size="sm" variant="secondary">
                 <LayoutDashboard className="h-4 w-4" />
-                Dashboard
+                แดชบอร์ด
               </ButtonLink>
               <Link
                 href={dashboardHref}
                 className="rounded-full transition-transform hover:scale-105"
-                aria-label="Your account"
+                aria-label="บัญชีของคุณ"
               >
                 <Avatar name={user.name} />
               </Link>
@@ -57,10 +57,10 @@ export async function SiteHeader() {
                 size="sm"
                 className="hidden sm:inline-flex"
               >
-                Sign in
+                เข้าสู่ระบบ
               </ButtonLink>
               <ButtonLink href="/register" size="sm">
-                Get started
+                เริ่มใช้งาน
               </ButtonLink>
             </>
           )}

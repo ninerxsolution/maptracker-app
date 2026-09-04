@@ -3,8 +3,8 @@ import { Spinner } from "@/components/ui/spinner";
 
 export default function ZonesLoading() {
   return (
-    <div className="flex h-full flex-col lg:flex-row" role="status" aria-label="Loading watch zones">
-      <span className="sr-only">Loading…</span>
+    <div className="flex h-full flex-col lg:flex-row" role="status" aria-label="กำลังโหลดโซนเฝ้าระวัง">
+      <span className="sr-only">กำลังโหลด…</span>
       <div className="shrink-0 space-y-3 border-b border-border p-4 lg:w-[380px] lg:border-b-0 lg:border-r">
         <Skeleton className="h-6 w-32" />
         {Array.from({ length: 5 }).map((_, i) => (

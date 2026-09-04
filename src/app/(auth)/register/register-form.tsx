@@ -22,7 +22,7 @@ export function RegisterForm() {
       type="button"
       onClick={() => setShowPw((v) => !v)}
       className="grid h-7 w-7 place-items-center rounded-lg text-faint transition-colors hover:text-fg"
-      aria-label={showPw ? "Hide password" : "Show password"}
+      aria-label={showPw ? "ซ่อนรหัสผ่าน" : "แสดงรหัสผ่าน"}
     >
       {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
     </button>
@@ -38,7 +38,7 @@ export function RegisterForm() {
       )}
 
       <TextField
-        label="Full name"
+        label="ชื่อ-นามสกุล"
         name="name"
         type="text"
         autoComplete="name"
@@ -49,7 +49,7 @@ export function RegisterForm() {
       />
 
       <TextField
-        label="Email"
+        label="อีเมล"
         name="email"
         type="email"
         autoComplete="email"
@@ -60,11 +60,11 @@ export function RegisterForm() {
       />
 
       <TextField
-        label="Password"
+        label="รหัสผ่าน"
         name="password"
         type={showPw ? "text" : "password"}
         autoComplete="new-password"
-        placeholder="At least 8 characters"
+        placeholder="อย่างน้อย 8 ตัวอักษร"
         icon={Lock}
         error={state?.fieldErrors?.password?.[0]}
         trailing={pwToggle}
@@ -72,11 +72,11 @@ export function RegisterForm() {
       />
 
       <TextField
-        label="Confirm password"
+        label="ยืนยันรหัสผ่าน"
         name="confirmPassword"
         type={showPw ? "text" : "password"}
         autoComplete="new-password"
-        placeholder="Re-enter your password"
+        placeholder="กรอกรหัสผ่านอีกครั้ง"
         icon={Lock}
         error={state?.fieldErrors?.confirmPassword?.[0]}
         required
@@ -84,7 +84,7 @@ export function RegisterForm() {
 
       <Button type="submit" className="w-full" loading={pending}>
         {!pending && <UserPlus className="h-4 w-4" />}
-        Create account
+        สร้างบัญชี
       </Button>
     </form>
   );

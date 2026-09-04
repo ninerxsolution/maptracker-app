@@ -10,7 +10,7 @@ function MapSkeleton() {
     <div className="grid h-full w-full place-items-center bg-map-bg">
       <div className="flex flex-col items-center gap-3 text-muted">
         <Spinner className="h-6 w-6 text-primary" />
-        <p className="text-sm">Loading map…</p>
+        <p className="text-sm">กำลังโหลดแผนที่…</p>
       </div>
     </div>
   );
