@@ -17,6 +17,7 @@ import { Logo } from "@/components/brand/logo";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { LogoutButton } from "@/components/auth/logout-button";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const nav: { href: string; label: string; icon: LucideIcon }[] = [
@@ -55,13 +56,16 @@ export function AdminShell({
           <Logo href="/admin" showText={false} />
           <Badge variant="danger">Admin</Badge>
         </div>
-        <button
-          onClick={() => setMobileOpen(false)}
-          className="grid h-8 w-8 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-fg lg:hidden"
-          aria-label="Close menu"
-        >
-          <X className="h-5 w-5" />
-        </button>
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="grid h-8 w-8 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-fg lg:hidden"
+            aria-label="ปิดเมนู"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
       </div>
 
       <nav className="flex-1 space-y-1 px-3 py-2">
@@ -146,7 +150,8 @@ export function AdminShell({
           >
             <Menu className="h-5 w-5" />
           </button>
-          <Badge variant="danger">Admin</Badge>
+          <Badge variant="danger">ผู้ดูแล</Badge>
+          <ThemeToggle className="ml-auto" />
         </div>
         <main className="min-h-0 flex-1 overflow-y-auto">{children}</main>
       </div>

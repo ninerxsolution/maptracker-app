@@ -27,7 +27,7 @@ export default function ExploreLoading() {
           </div>
         </aside>
 
-        <div className="grid min-h-[55vh] flex-1 place-items-center bg-[#0b0e14] lg:min-h-0">
+        <div className="grid min-h-[55vh] flex-1 place-items-center bg-map-bg lg:min-h-0">
           <div className="flex flex-col items-center gap-3 text-muted">
             <Spinner className="h-6 w-6 text-primary" />
             <p className="text-sm">Loading live earthquake map…</p>

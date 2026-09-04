@@ -17,6 +17,7 @@ import {
 import { Logo } from "@/components/brand/logo";
 import { Avatar } from "@/components/ui/avatar";
 import { LogoutButton } from "@/components/auth/logout-button";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { cn } from "@/lib/utils";
 
 type NavItem = {
@@ -64,13 +65,16 @@ export function AppShell({
     <>
       <div className="flex h-16 items-center justify-between px-5">
         <Logo href="/app" />
-        <button
-          onClick={() => setMobileOpen(false)}
-          className="grid h-8 w-8 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-fg lg:hidden"
-          aria-label="Close menu"
-        >
-          <X className="h-5 w-5" />
-        </button>
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="grid h-8 w-8 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-fg lg:hidden"
+            aria-label="ปิดเมนู"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
       </div>
 
       <nav className="flex-1 space-y-1 px-3 py-2">
@@ -170,6 +174,7 @@ export function AppShell({
             <Menu className="h-5 w-5" />
           </button>
           <Logo href="/app" />
+          <ThemeToggle className="ml-auto" />
         </div>
         <main className="min-h-0 flex-1 overflow-y-auto">{children}</main>
       </div>

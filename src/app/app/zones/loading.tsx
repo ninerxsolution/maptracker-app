@@ -11,7 +11,7 @@ export default function ZonesLoading() {
           <Skeleton key={i} className="h-14 w-full" />
         ))}
       </div>
-      <div className="grid min-h-[50vh] flex-1 place-items-center bg-[#0b0e14] lg:min-h-0">
+      <div className="grid min-h-[50vh] flex-1 place-items-center bg-map-bg lg:min-h-0">
         <Spinner className="h-6 w-6 text-primary" />
       </div>
     </div>

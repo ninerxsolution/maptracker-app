@@ -3,6 +3,7 @@ import { LayoutDashboard } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { ButtonLink } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { getCurrentUser } from "@/lib/auth/current-user";
 
 const navLinks = [
@@ -33,6 +34,7 @@ export async function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           {user ? (
             <>
               <ButtonLink href={dashboardHref} size="sm" variant="secondary">

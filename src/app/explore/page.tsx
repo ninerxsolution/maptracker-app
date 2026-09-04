@@ -7,6 +7,7 @@ import { getCurrentUser } from "@/lib/auth/current-user";
 import { Logo } from "@/components/brand/logo";
 import { ButtonLink } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { ExploreClient } from "./explore-client";
 
 export const metadata: Metadata = {
@@ -54,6 +55,7 @@ export default async function ExplorePage() {
           </Link>
         </div>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           {user ? (
             <>
               <ButtonLink
