@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Code2, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 
 export function SiteFooter() {
@@ -47,21 +47,10 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-border/70 pt-6 text-sm text-faint sm:flex-row">
-          <p>
-            © {new Date().getFullYear()} MapTracker
-            ข้อมูลแผ่นดินไหวได้รับความอนุเคราะห์จาก U.S. Geological Survey
-          </p>
-          <a
-            href="https://github.com/ninerxsolution/maptracker-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 transition-colors hover:text-fg"
-          >
-            <Code2 className="h-4 w-4" />
-            ซอร์สโค้ด
-          </a>
-        </div>
+        <p className="mt-10 border-t border-border/70 pt-6 text-center text-sm text-faint sm:text-left">
+          © {new Date().getFullYear()} MapTracker
+          ข้อมูลแผ่นดินไหวได้รับความอนุเคราะห์จาก U.S. Geological Survey
+        </p>
       </div>
     </footer>
   );
