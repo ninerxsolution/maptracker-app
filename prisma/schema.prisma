@@ -1,7 +1,7 @@
 // MapTracker — Prisma schema
 // Docs: https://pris.ly/d/prisma-schema
 //
-// PostgreSQL (Neon in production, Docker locally — see docker-compose.yml).
+// PostgreSQL (Prisma Postgres on Vercel, Docker locally — see docker-compose.yml).
 // role/status/alert are plain strings validated in the app layer
 // (see src/lib/constants.ts); this kept the schema portable from SQLite.
 
@@ -10,10 +10,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  // Neon's Vercel integration injects both: pooled for the app, direct for migrations.
-  url       = env("DATABASE_URL")
-  directUrl = env("DATABASE_URL_UNPOOLED")
+  provider = "postgresql"
+  // One URL for the app and migrations — the Prisma Postgres Vercel integration injects it.
+  url      = env("DATABASE_URL")
 }
 
 model User {

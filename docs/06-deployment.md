@@ -1,7 +1,7 @@
 # Deployment
 
-MapTracker runs on **PostgreSQL** — Docker locally, **Neon** in production on
-**Vercel**. (A SQLite file can't be used on Vercel: serverless functions have an
+MapTracker runs on **PostgreSQL** — Docker locally, **Prisma Postgres** in
+production on **Vercel**. (A SQLite file can't be used on Vercel: serverless functions have an
 ephemeral filesystem and no shared disk, so writes would vanish.)
 
 ## Local
@@ -19,34 +19,35 @@ npm run dev
 
 ## Environment variables
 
-| Variable                | Required | Notes |
-| ----------------------- | -------- | ----- |
-| `DATABASE_URL`          | ✅       | Pooled connection — used by the app. Injected by the Neon integration on Vercel. |
-| `DATABASE_URL_UNPOOLED` | ✅       | Direct connection — used by `prisma migrate deploy`. Injected by the Neon integration. |
-| `AUTH_SECRET`           | ✅       | Signs session JWTs. In production it must be ≥ 32 chars and not a placeholder (enforced at runtime). |
-| `NEXT_PUBLIC_APP_URL`   | ➖       | Absolute base URL for metadata/links. |
-| `SEED_ADMIN_PASSWORD`   | ➖       | Overrides the seeded admin password. |
+| Variable              | Required | Notes |
+| --------------------- | -------- | ----- |
+| `DATABASE_URL`        | ✅       | Used by the app and by `prisma migrate deploy`. Injected by the Prisma Postgres integration on Vercel. |
+| `AUTH_SECRET`         | ✅       | Signs session JWTs. In production it must be ≥ 32 chars and not a placeholder (enforced at runtime). |
+| `NEXT_PUBLIC_APP_URL` | ➖       | Absolute base URL for metadata/links. |
+| `SEED_ADMIN_PASSWORD` | ➖       | Overrides the seeded admin password. |
 
-## Vercel + Neon (free tiers)
+The integration also adds `…POSTGRES_URL` and `…PRISMA_DATABASE_URL` (an
+Accelerate URL); the app doesn't use them.
+
+## Vercel + Prisma Postgres (free tiers)
 
 1. **Import the repo** — Vercel → *Add New → Project* → pick the GitHub repo.
    Framework is detected as Next.js; the build command comes from `vercel.json`
    (`npm run vercel-build` = `prisma generate && prisma migrate deploy && next build`).
-2. **Add the database** — Project → *Storage* → *Create* → **Neon** → connect it to
-   the project (Production + Preview). This injects `DATABASE_URL` and
-   `DATABASE_URL_UNPOOLED`; don't set them by hand.
-   - Enable Neon **Preview branching** if you deploy previews, so each preview gets
-     its own database branch instead of migrating the production database.
+2. **Add the database** — Project → *Storage* → *Create* → **Prisma Postgres** →
+   connect it to the project. This injects `DATABASE_URL`; don't set it by hand.
+   - Preview deployments share this database (and run migrations against it).
+     Connect it to Production only if previews shouldn't touch it.
 3. **Add `AUTH_SECRET`** — Project → *Settings → Environment Variables* → Production
    and Preview. Generate one locally:
    `[Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(48)) | Set-Clipboard`
    (PowerShell) or `openssl rand -base64 48`.
 4. **Deploy** — redeploy after adding the database. Migrations run during the build.
-5. **Seed once (optional)** — copy the Neon **direct** connection string (Neon
-   console → Connect, pooling off) and run the seed against it from your terminal:
+5. **Seed once (optional)** — copy the `DATABASE_URL` value (Vercel → *Storage* →
+   the database → *.env.local* tab → *Show secret*) and run the seed against it
+   from your terminal without pasting it anywhere else:
    ```powershell
-   $env:DATABASE_URL = "<neon direct url>"; $env:DATABASE_URL_UNPOOLED = $env:DATABASE_URL
-   npm run db:seed
+   $env:DATABASE_URL = Get-Clipboard; npm run db:seed; Remove-Item Env:DATABASE_URL
    ```
    Shell variables override `.env`. Set `SEED_ADMIN_PASSWORD` too if the site is public.
 
@@ -54,8 +55,10 @@ npm run dev
 
 - `postinstall` also runs `prisma generate`, so the client is built even with a
   cached `node_modules`.
-- Neon's free compute scales to zero after 5 minutes idle; the first request
-  afterwards waits for it to wake (usually well under a second).
-- If you ever see `prepared statement "s0" already exists`, append
-  `pgbouncer=true` to the pooled `DATABASE_URL`.
+- The free plan includes 200k operations/month and 2 GB storage — plenty for a demo.
+  Prisma Client is a global singleton (`src/lib/db.ts`) so warm functions reuse
+  their connection.
+- Switching to **Neon** instead: it injects a pooled `DATABASE_URL` plus
+  `DATABASE_URL_UNPOOLED`; add `directUrl = env("DATABASE_URL_UNPOOLED")` to the
+  datasource so migrations use the direct connection.
 - Basemap tiles and the USGS feeds are public and need no keys.

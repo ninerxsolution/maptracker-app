@@ -1,4 +1,4 @@
-# Local Postgres for development. Production uses Neon (via the Vercel integration).
+# Local Postgres for development. Production uses Prisma Postgres (via the Vercel integration).
 # Start: docker compose up -d   ·   Stop: docker compose down
 # Exposed on 5433 so it doesn't clash with a Postgres already installed on 5432.
 services:
