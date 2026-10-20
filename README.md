@@ -4,7 +4,7 @@
 
 MapTracker turns the USGS Earthquake Hazards Program's real-time GeoJSON feed into an interactive world map, wrapped in a full product: a public explorer, a personal dashboard for signed-in users, and an admin backoffice.
 
-**Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Prisma + PostgreSQL (Neon) · Leaflet · Recharts · hand-rolled JWT auth
+**Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Prisma + PostgreSQL (Prisma Postgres) · Leaflet · Recharts · hand-rolled JWT auth
 
 ---
 

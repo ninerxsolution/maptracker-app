@@ -21,12 +21,15 @@ Prisma 6's classic `prisma-client-js` generator + `url = env(...)` is the
 well-documented path.
 **Trade-off:** not on the newest major — trivially upgradable later.
 
-## Postgres (Neon) for deployment
+## Postgres (Prisma Postgres) for deployment
 
-**Decision:** moved from SQLite to PostgreSQL — Docker locally, Neon on Vercel.
+**Decision:** moved from SQLite to PostgreSQL — Docker locally, Prisma Postgres on
+Vercel.
 **Why:** a SQLite file can't persist on Vercel (ephemeral serverless filesystem,
-no shared disk). Neon has a permanent free tier, plugs into Vercel with one click
-(injecting pooled + direct URLs), and Prisma Migrate works against it directly.
+no shared disk). Prisma Postgres has a free plan (no card), plugs into Vercel from
+the Storage tab with one click, and injects a single `DATABASE_URL` that serves
+both the app and Prisma Migrate. Neon works too (it needs an extra `directUrl` for
+migrations — see [deployment](./06-deployment.md)).
 Turso (SQLite-compatible) was considered, but with Prisma 6 its migrations need a
 workaround that is partly early-access. Because all queries go through Prisma and
 none were SQLite-specific, the switch only touched the datasource, the migrations,
