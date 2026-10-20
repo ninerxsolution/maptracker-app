@@ -21,10 +21,12 @@ const fallback = [
   { top: "72%", left: "48%", color: "var(--color-mag-moderate)", size: 11, delay: "0.2s" },
 ];
 
+// Equirectangular projection — must match the --world-map bbox (lng ±180, lat ±85).
+const LAT_EXTENT = 85;
 function project(lat: number, lng: number) {
   const left = ((lng + 180) / 360) * 100;
-  const top = ((90 - lat) / 180) * 100;
-  return { left: `${Math.min(98, Math.max(2, left))}%`, top: `${Math.min(94, Math.max(6, top))}%` };
+  const top = ((LAT_EXTENT - lat) / (2 * LAT_EXTENT)) * 100;
+  return { left: `${Math.min(99, Math.max(1, left))}%`, top: `${Math.min(98, Math.max(2, top))}%` };
 }
 
 export function MonitorPreview({ events }: { events?: PreviewEvent[] }) {
@@ -32,7 +34,7 @@ export function MonitorPreview({ events }: { events?: PreviewEvent[] }) {
   const latest = live?.[0];
 
   return (
-    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-surface/80 shadow-2xl shadow-black/40">
+    <div className="w-full overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl shadow-black/20">
       <div className="flex items-center justify-between border-b border-border/70 px-4 py-2.5">
         <div className="flex items-center gap-2">
           <span className="live-dot" />
@@ -45,7 +47,12 @@ export function MonitorPreview({ events }: { events?: PreviewEvent[] }) {
         </div>
       </div>
 
-      <div className="relative h-full w-full grid-bg">
+      <div
+        className="relative aspect-[36/17] w-full bg-map-bg"
+        style={{ backgroundImage: "var(--world-map)", backgroundSize: "100% 100%" }}
+        role="img"
+        aria-label="แผนที่โลกแสดงตำแหน่งแผ่นดินไหวล่าสุด"
+      >
         {live
           ? live.map((e, i) => {
               const pos = project(e.lat, e.lng);
@@ -97,39 +104,43 @@ export function MonitorPreview({ events }: { events?: PreviewEvent[] }) {
               </span>
             ))}
 
-        <div className="absolute inset-x-0 bottom-0 border-t border-border/70 bg-bg/60 px-4 py-3 backdrop-blur-sm">
-          {latest ? (
-            <div className="flex items-center gap-3">
-              <span
-                className="font-mono text-sm font-semibold tabular"
-                style={{ color: magnitudeColor(latest.mag) }}
-              >
-                M{formatMagnitude(latest.mag)}
-              </span>
-              <span className="truncate text-xs text-muted">
-                {latest.place ?? "ไม่ทราบตำแหน่ง"}
-              </span>
-              <span className="ml-auto shrink-0 text-xs text-faint">
-                <RelativeTime value={latest.time} />
-              </span>
-            </div>
-          ) : (
-            <div className="flex items-center gap-3">
-              <Waves className="h-4 w-4 shrink-0 text-primary" />
-              <svg viewBox="0 0 400 40" className="h-8 w-full text-primary" preserveAspectRatio="none" aria-hidden>
-                <polyline
-                  points="0,20 30,20 45,8 60,32 75,14 90,26 110,20 150,20 165,4 180,36 195,12 210,28 230,20 280,20 295,10 310,30 325,16 340,24 360,20 400,20"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                  opacity="0.85"
-                />
-              </svg>
-            </div>
-          )}
-        </div>
+        <span className="pointer-events-none absolute bottom-1 right-2 text-[9px] text-faint">
+          © Esri
+        </span>
+      </div>
+
+      <div className="border-t border-border/70 px-4 py-3">
+        {latest ? (
+          <div className="flex items-center gap-3">
+            <span
+              className="font-mono text-sm font-semibold tabular"
+              style={{ color: magnitudeColor(latest.mag) }}
+            >
+              M{formatMagnitude(latest.mag)}
+            </span>
+            <span className="truncate text-xs text-muted">
+              {latest.place ?? "ไม่ทราบตำแหน่ง"}
+            </span>
+            <span className="ml-auto shrink-0 text-xs text-faint">
+              <RelativeTime value={latest.time} />
+            </span>
+          </div>
+        ) : (
+          <div className="flex items-center gap-3">
+            <Waves className="h-4 w-4 shrink-0 text-primary" />
+            <svg viewBox="0 0 400 40" className="h-8 w-full text-primary" preserveAspectRatio="none" aria-hidden>
+              <polyline
+                points="0,20 30,20 45,8 60,32 75,14 90,26 110,20 150,20 165,4 180,36 195,12 210,28 230,20 280,20 295,10 310,30 325,16 340,24 360,20 400,20"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                opacity="0.85"
+              />
+            </svg>
+          </div>
+        )}
       </div>
     </div>
   );
