@@ -4,7 +4,7 @@
 
 MapTracker turns the USGS Earthquake Hazards Program's real-time GeoJSON feed into an interactive world map, wrapped in a full product: a public explorer, a personal dashboard for signed-in users, and an admin backoffice.
 
-**Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Prisma + SQLite · Leaflet · Recharts · hand-rolled JWT auth
+**Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Prisma + PostgreSQL (Neon) · Leaflet · Recharts · hand-rolled JWT auth
 
 ---
 
@@ -45,10 +45,11 @@ The seed creates two known accounts (plus ~40 members) — one click fills them 
 # 1. Install
 npm install
 
-# 2. Configure env (a working .env is included for local dev; see .env.example)
+# 2. Configure env (local DB URLs are pre-filled in .env.example)
 cp .env.example .env   # then set AUTH_SECRET
 
-# 3. Create the database + seed with real USGS data
+# 3. Start Postgres (Docker), create the schema, seed with real USGS data
+npm run db:up          # Postgres 17 on port 5433
 npm run db:migrate     # applies migrations
 npm run db:seed        # ingests live USGS events + demo users/zones/bookmarks
 
@@ -64,6 +65,7 @@ npm run dev            # http://localhost:3000
 | ------------------- | ------------------------------------------ |
 | `npm run dev`       | Start the dev server (Turbopack)           |
 | `npm run build`     | Production build                           |
+| `npm run db:up` / `db:down` | Start / stop local Postgres (Docker) |
 | `npm run db:migrate`| Apply Prisma migrations                    |
 | `npm run db:seed`   | Seed the database                          |
 | `npm run db:reset`  | Drop, re-migrate, and re-seed              |
