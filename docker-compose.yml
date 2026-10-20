@@ -1,0 +1,23 @@
+# Local Postgres for development. Production uses Neon (via the Vercel integration).
+# Start: docker compose up -d   ·   Stop: docker compose down
+# Exposed on 5433 so it doesn't clash with a Postgres already installed on 5432.
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: maptracker
+      POSTGRES_PASSWORD: maptracker
+      POSTGRES_DB: maptracker
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U maptracker -d maptracker"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+volumes:
+  pgdata:

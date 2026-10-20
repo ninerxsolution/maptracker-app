@@ -1,6 +1,7 @@
 # Data model
 
-Defined in [`prisma/schema.prisma`](../prisma/schema.prisma). SQLite has no native
+Defined in [`prisma/schema.prisma`](../prisma/schema.prisma) (PostgreSQL). The
+schema began on SQLite, which has no native
 enums, so `role`, `status`, and `alert` are stored as strings and validated in the
 app layer (`src/lib/constants.ts`).
 

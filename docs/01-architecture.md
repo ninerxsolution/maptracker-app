@@ -10,7 +10,7 @@
 | Motion     | **motion** (Framer) + CSS keyframes | Reveal-on-scroll, transitions, micro-interactions |
 | Data viz   | **Recharts** | Admin analytics |
 | Map        | **Leaflet** + `react-leaflet` v5 | Mature, no key required |
-| ORM/DB     | **Prisma 6** + **SQLite** | Zero-config local dev; swappable for Postgres/Turso |
+| ORM/DB     | **Prisma 6** + **PostgreSQL** | Neon on Vercel, Docker locally; Prisma keeps queries DB-agnostic |
 | Auth       | Hand-rolled: **jose** (JWT) + **bcryptjs** | Full control, no beta dependencies |
 | Validation | **zod** | Shared schemas for actions and forms |
 
