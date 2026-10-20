@@ -18,6 +18,20 @@ The public centrepiece — a full-screen live map:
 - **Live** — auto-refreshes every 60s; a manual refresh button too.
 - Signed-in users get a **Save/Saved** bookmark toggle in the detail panel.
 
+### Countries (`/countries`)
+The earthquake situation per country (and per ocean region for offshore events):
+
+- USGS has no country field, so `src/lib/countries.ts` normalises the free-text
+  `place` — US states roll up into the United States (with a per-state breakdown),
+  island groups map to their sovereign country, aliases like `MX` / `Burma (Myanmar)`
+  are merged, and mid-ocean ridges/seas form their own groups. Names are shown in
+  Thai via `Intl.DisplayNames`.
+- Per country: event count, max magnitude, significant events, felt reports,
+  tsunami flags, latest event, and a **situation level** — รุนแรง (M6+ or PAGER
+  orange/red), เฝ้าระวัง (M4.5+, PAGER yellow, or a tsunami flag), else ปกติ.
+- Time-window and magnitude filters live in the URL; search (Thai or English, incl.
+  sub-regions), sort, and expandable rows with the latest events.
+
 ## Member (`/app/*`)
 
 ### Dashboard (`/app`)

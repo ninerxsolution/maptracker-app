@@ -9,8 +9,10 @@ https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/{level}_{period}.geojs
 ```
 
 where `period` ∈ `hour | day | week | month` and `level` includes `all`, `2.5`,
-`4.5`, `significant`. MapTracker uses the `all_*` feeds (see
-`USGS_FEEDS` in `src/lib/constants.ts`) and filters by magnitude itself. **No API
+`4.5`, `significant`. `fetchQuakes` picks the **smallest feed that still covers
+the requested minimum magnitude** (`all` → `1.0` → `2.5` → `4.5`) and then filters
+by magnitude itself. This matters: `all_month` is ~7–9 MB, over Next's 2 MB
+fetch-cache limit, while `2.5_month` is ~1.3 MB and caches normally. **No API
 key is required**, and the feeds send permissive CORS headers, so they're
 fetchable from both the server and the browser. They regenerate about once a
 minute.

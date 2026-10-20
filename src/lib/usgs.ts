@@ -69,6 +69,16 @@ function mapFeature(f: RawFeature): Quake | null {
 }
 
 /**
+ * Smallest USGS summary feed that still contains every event >= minMag.
+ * (all_month is ~7–9 MB — over Next's 2 MB fetch-cache limit — while 2.5_month is ~1.3 MB.)
+ */
+function feedUrl(window: TimeWindow, minMag: number): string {
+  if (minMag < 1) return USGS_FEEDS[window];
+  const level = minMag >= 4.5 ? "4.5" : minMag >= 2.5 ? "2.5" : "1.0";
+  return `https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/${level}_${window}.geojson`;
+}
+
+/**
  * Fetch a USGS summary feed (server-side, cached 60s to match USGS's cadence),
  * normalize it, and filter by minimum magnitude.
  */
@@ -76,7 +86,7 @@ export async function fetchQuakes(
   window: TimeWindow,
   minMag = 0,
 ): Promise<QuakeResponse> {
-  const res = await fetch(USGS_FEEDS[window], {
+  const res = await fetch(feedUrl(window, minMag), {
     next: { revalidate: 60 },
     headers: { Accept: "application/json" },
   });

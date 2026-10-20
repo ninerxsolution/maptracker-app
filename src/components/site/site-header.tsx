@@ -8,6 +8,7 @@ import { getCurrentUser } from "@/lib/auth/current-user";
 
 const navLinks = [
   { href: "/explore", label: "สำรวจ" },
+  { href: "/countries", label: "รายประเทศ" },
   { href: "/#features", label: "ฟีเจอร์" },
   { href: "/#data", label: "ข้อมูล" },
 ];
