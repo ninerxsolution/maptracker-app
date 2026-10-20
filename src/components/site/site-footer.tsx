@@ -21,6 +21,7 @@ export function SiteFooter() {
               title="ผลิตภัณฑ์"
               links={[
                 { href: "/explore", label: "สำรวจแผนที่" },
+                { href: "/countries", label: "สถานการณ์รายประเทศ" },
                 { href: "/register", label: "สร้างบัญชี" },
                 { href: "/login", label: "เข้าสู่ระบบ" },
               ]}

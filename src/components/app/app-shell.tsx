@@ -9,6 +9,7 @@ import {
   Bookmark,
   Bell,
   Globe2,
+  Flag,
   Menu,
   X,
   ShieldCheck,
@@ -55,6 +56,7 @@ export function AppShell({
     { href: "/app/bookmarks", label: "บุ๊กมาร์ก", icon: Bookmark },
     { href: "/app/alerts", label: "การแจ้งเตือน", icon: Bell, badge: unreadCount },
     { href: "/explore", label: "แผนที่สด", icon: Globe2, external: true },
+    { href: "/countries", label: "รายประเทศ", icon: Flag, external: true },
   ];
 
   function isActive(href: string) {
