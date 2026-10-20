@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { relativeTime } from "@/lib/format";
 
+const noopSubscribe = () => () => {};
+
 /**
- * Renders a relative timestamp ("2 hours ago") only after mount, so the server
- * and first client render agree (both empty) and hydration never mismatches on
- * a moving "now".
+ * Renders a relative timestamp ("2 ชั่วโมงที่แล้ว") only on the client. Server
+ * and hydration render empty, so a moving "now" never causes a mismatch.
  */
 export function RelativeTime({
   value,
@@ -15,11 +16,10 @@ export function RelativeTime({
   value: number | string | Date | null | undefined;
   className?: string;
 }) {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  return (
-    <span suppressHydrationWarning className={className}>
-      {mounted ? relativeTime(value) : ""}
-    </span>
+  const isClient = useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false,
   );
+  return <span className={className}>{isClient ? relativeTime(value) : ""}</span>;
 }

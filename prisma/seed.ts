@@ -243,7 +243,7 @@ async function main() {
 
   // --- users ---
   console.log("• Creating users");
-  const admin = await db.user.create({
+  await db.user.create({
     data: {
       email: "admin@maptracker.app",
       name: "Avery Admin",

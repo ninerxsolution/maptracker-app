@@ -8,7 +8,6 @@ import {
   StickyNote,
   Pencil,
   Check,
-  X,
   MapPin,
   ArrowDownToLine,
 } from "lucide-react";

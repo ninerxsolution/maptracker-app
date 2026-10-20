@@ -1,16 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
 import { useTheme } from "./theme-provider";
 import { cn } from "@/lib/utils";
 
 export function ThemeToggle({ className }: { className?: string }) {
   const { theme, toggle } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
-  const isDark = mounted && theme === "dark";
+  const isDark = theme === "dark";
 
   return (
     <button
@@ -23,13 +19,11 @@ export function ThemeToggle({ className }: { className?: string }) {
         className,
       )}
     >
-      <span suppressHydrationWarning className="grid place-items-center">
-        {isDark ? (
-          <Sun className="h-[1.15rem] w-[1.15rem]" />
-        ) : (
-          <Moon className="h-[1.15rem] w-[1.15rem]" />
-        )}
-      </span>
+      {isDark ? (
+        <Sun className="h-[1.15rem] w-[1.15rem]" />
+      ) : (
+        <Moon className="h-[1.15rem] w-[1.15rem]" />
+      )}
     </button>
   );
 }

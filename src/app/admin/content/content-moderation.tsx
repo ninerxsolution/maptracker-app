@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { Trash2, Radar, Bookmark } from "lucide-react";
 import { Segmented } from "@/components/ui/segmented";
 import { Button } from "@/components/ui/button";
-import { Avatar } from "@/components/ui/avatar";
 import { MagBadge } from "@/components/quakes/mag-badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import { RelativeTime } from "@/components/ui/relative-time";

@@ -19,9 +19,7 @@ import { SyncButton } from "./sync-panel";
 
 export const metadata = { title: "ระบบ" };
 
-export default async function AdminSystemPage() {
-  await requireAdmin();
-
+async function loadSystemData() {
   const weekAgo = new Date(Date.now() - 7 * 86400000);
   const [eventCount, weekEvents, lastSynced, alertCount, recentAlerts] =
     await Promise.all([
@@ -52,6 +50,29 @@ export default async function AdminSystemPage() {
   } catch {
     feedOk = false;
   }
+
+  return {
+    eventCount,
+    weekEvents,
+    lastSynced,
+    alertCount,
+    recentAlerts,
+    feedOk,
+    feedGenerated,
+  };
+}
+
+export default async function AdminSystemPage() {
+  await requireAdmin();
+  const {
+    eventCount,
+    weekEvents,
+    lastSynced,
+    alertCount,
+    recentAlerts,
+    feedOk,
+    feedGenerated,
+  } = await loadSystemData();
 
   return (
     <Container className="space-y-6 py-6">
