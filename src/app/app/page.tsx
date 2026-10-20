@@ -16,7 +16,6 @@ import { relativeTime } from "@/lib/format";
 import { Container } from "@/components/ui/container";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatTile } from "@/components/ui/stat-tile";
-import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/app/page-header";

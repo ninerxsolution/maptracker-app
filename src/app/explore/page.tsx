@@ -16,21 +16,17 @@ export const metadata: Metadata = {
     "แผนที่โลกแบบโต้ตอบแสดงแผ่นดินไหวล่าสุด อัปเดตทุกนาทีจาก USGS Earthquake Hazards Program",
 };
 
+async function loadInitialQuakes(): Promise<QuakeResponse> {
+  try {
+    return await fetchQuakes("day", 0);
+  } catch {
+    return { quakes: [], generated: Date.now(), count: 0, window: "day", minMag: 0 };
+  }
+}
+
 export default async function ExplorePage() {
   const user = await getCurrentUser();
-
-  let initial: QuakeResponse;
-  try {
-    initial = await fetchQuakes("day", 0);
-  } catch {
-    initial = {
-      quakes: [],
-      generated: Date.now(),
-      count: 0,
-      window: "day",
-      minMag: 0,
-    };
-  }
+  const initial = await loadInitialQuakes();
 
   let bookmarkedIds: string[] = [];
   if (user) {
