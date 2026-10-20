@@ -77,6 +77,9 @@
 @layer base {
   :root {
     color-scheme: light;
+    /* Equirectangular (EPSG:4326) world basemap for the landing preview.
+       Cropped to lat ±85° — Esri has no data past that, which renders as blank bands. */
+    --world-map: url("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/export?bbox=-180,-85,180,85&bboxSR=4326&imageSR=4326&size=1600,756&format=png&f=image");
     --grid-line: rgba(15, 20, 38, 0.05);
     --glow-a: rgba(56, 189, 248, 0.14);
     --glow-b: rgba(139, 92, 246, 0.1);
@@ -85,6 +88,7 @@
   /* --- DARK palette override --- */
   :root[data-theme="dark"] {
     color-scheme: dark;
+    --world-map: url("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/export?bbox=-180,-85,180,85&bboxSR=4326&imageSR=4326&size=1600,756&format=png&f=image");
     --grid-line: rgba(255, 255, 255, 0.035);
     --glow-a: rgba(56, 189, 248, 0.1);
     --glow-b: rgba(139, 92, 246, 0.08);
